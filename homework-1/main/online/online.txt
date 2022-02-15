@@ -1,6 +1,4 @@
 
-city:Lviv;
-
 name:Ann;
 
 age:25;
