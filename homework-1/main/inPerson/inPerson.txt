@@ -1,0 +1,14 @@
+
+city:Odessa;
+
+name:Andrii;
+
+age:22;
+
+city:Lviv;
+
+name:Mariana;
+
+age:18;
+
+city:Lviv;

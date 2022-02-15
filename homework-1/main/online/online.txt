@@ -1,1 +1,14 @@
-nameagecityagecityname
+
+city:Lviv;
+
+name:Ann;
+
+age:25;
+
+city:Kyiv;
+
+name:Valera;
+
+age:35;
+
+city:Odessa;
