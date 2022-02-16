@@ -7,41 +7,41 @@ const fs = require("fs");
 
 // 1. Спробуйте створити якийсь файл txt, прочитайте з нього дані і одразу, дані які ви отримали запишіть їх в інший файл.
 
-fs.mkdir(path.join(__dirname, "task-1"), (err) => {
-  if (err) {
-    console.log(err);
-    throw err;
-  }
-    fs.writeFile(
-    path.join(__dirname, "task-1", "file-1.txt"),
-    "NEW_DATA",
-    (err) => {
-        if (err) {
-        console.log(err);
-        throw err;
-        }
-        fs.readFile(path.join(__dirname, "task-1", "file-1.txt"), (err, data) => {
-        if (err) {
-        console.log(err);
-        throw err;
-        }
-          if (data){
-          fs.writeFile(
-          path.join(__dirname, "task-1", "file-2.txt"),
-          `${data}`,
-           (err) => {
-            if (err) {
-              console.log(err);
-              throw err;
-            }
-          }
-        );
-      }
-    }
-  )
-  })
+// fs.mkdir(path.join(__dirname, "task-1"), (err) => {
+//   if (err) {
+//     console.log(err);
+//     throw err;
+//   }
+//     fs.writeFile(
+//     path.join(__dirname, "task-1", "file-1.txt"),
+//     "NEW_DATA",
+//     (err) => {
+//         if (err) {
+//         console.log(err);
+//         throw err;
+//         }
+//         fs.readFile(path.join(__dirname, "task-1", "file-1.txt"), (err, data) => {
+//         if (err) {
+//         console.log(err);
+//         throw err;
+//         }
+//           if (data){
+//           fs.writeFile(
+//           path.join(__dirname, "task-1", "file-2.txt"),
+//           `${data}`,
+//            (err) => {
+//             if (err) {
+//               console.log(err);
+//               throw err;
+//             }
+//           }
+//         );
+//       }
+//     }
+//   )
+//   })
 
-})
+// })
 // console.log("====Task 2====");
 
 // 2. Створіть файл ( можете вручну ) заповніть його якимись даними
@@ -208,27 +208,27 @@ function readData() {
 
 // recursion ??
 
-// function readDataRecursion (fileName = '') {
-//    fs.readdir( path.join(__dirname, "task-3",fileName),{ withFileTypes: true },
-//          (err, listOfFiles1) => {
+// async function readDataRecursion (fileName = '') {
+//    await fs.readdir( path.join(__dirname, "task-3",fileName),{ withFileTypes: true },
+//          async (err, listOfFiles1) => {
 //           readErr(err);
     
-//           listOfFiles1.forEach( (file1) => {
+//           listOfFiles1.forEach( async (file1) => {
 //             console.log(file1.name);
     
 //             if (file1.isFile()) {
-//               fs.truncate(
+//              await fs.truncate(
 //                 path.join(__dirname, "task-3", `${file1.name}`),
 //                 0,
 //                 readErr
 //               );
 //             } else {
-//                fs.rename(
+//               await fs.rename(
 //                 path.join(__dirname, "task-3", `${file1.name}`),
 //                 path.join(__dirname, "task-3", `new_${file1.name}`),
 //                 readErr
 //               );
-//               readDataRecursion (`new_${file1.name}`)
+//               await readDataRecursion (`new_${file1.name}`)
 //               }
 //             }
 //           )
@@ -237,3 +237,6 @@ function readData() {
 //   )}
 
 // readDataRecursion();
+
+// const {argv} = require('process');
+// console.log(argv.slice(2));
