@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
-const { debuglog } = require("util");
+
+// const rimraf = require("rimraf");
 
 // condole.log("====Task 1====");
 
@@ -115,25 +116,24 @@ const readErr = (err) => {
   }
 };
 
-function createFolders() {
-  fs.mkdir(path.join(__dirname, "task-3"), readErr);
+ function createFolders() {
+ fs.mkdir(path.join(__dirname, "task-3"), readErr);
 
   for (i = 6; i > 0; i--) {
-    fs.mkdir(
+     fs.mkdir(
       path.join(__dirname, "task-3", `folder_${i}`),
-      { recursive: true },
       readErr
     );
 
     if (i <= 4) {
       fs.mkdir(
         path.join(__dirname, "task-3", `folder_${i}`, `folder_${i - 1}`),
-        { recursive: true },
+        {recursive: true},
         readErr
       );
     }
     if (i <= 2) {
-      fs.writeFile(
+     fs.writeFile(
         path.join(__dirname, "task-3", `folder_${i}`, `file_${i - 1}.txt`),
         `new data${i}`,
         readErr
@@ -143,20 +143,26 @@ function createFolders() {
 }
 
 function deleteDir() {
-  fs.rm(path.join(__dirname, "task-3"), { recursive: true }, readErr);
+  fs.rm(
+    path.join(__dirname, "task-3"),
+    { recursive: true, force: true },
+    readErr
+  );
+  // rimraf(path.join(__dirname, "task-3"), readErr);
 }
 
 // і напишіть функцію яка буде зчитувати папку і перевіряти якщо дані які в ній лежать - це файли тоді вам потрібно їх очистити, але не видаляти, якщо дані - це папки, вам потрібно їх перейменувати і додати до назви префікс _new
 
 function readData() {
-  fs.readdir(
+ fs.readdir(
     path.join(__dirname, "task-3"),
     { withFileTypes: true },
-    (err, listOfFiles) => {
+   (err, listOfFiles1) => {
       readErr(err);
 
-      listOfFiles.forEach((file1) => {
+      listOfFiles1.forEach((file1) => {
         console.log(file1.name);
+
         if (file1.isFile()) {
           fs.truncate(
             path.join(__dirname, "task-3", `${file1.name}`),
@@ -164,44 +170,29 @@ function readData() {
             readErr
           );
         } else {
-          fs.rename(
+            fs.rename(
             path.join(__dirname, "task-3", `${file1.name}`),
             path.join(__dirname, "task-3", `new_${file1.name}`),
             readErr
           );
           fs.readdir(
-            path.join(__dirname, "task-3", `${file1.name}`),
+            path.join(__dirname, "task-3", `new_${file1.name}`),
             { withFileTypes: true },
-            (err, listOfFiles2) => {
+           (err, listOfFiles2) => {
               readErr(err);
 
               listOfFiles2.forEach((file2) => {
                 console.log(file2.name);
+
                 if (file2.isFile()) {
                   fs.truncate(
-                    path.join(
-                      __dirname,
-                      "task-3",
-                      `new_${file1.name}`,
-                      `${file2.name}`
-                    ),
-                    0,
-                    readErr
-                  );
+                    path.join( __dirname, "task-3", `new_${file1.name}`, `${file2.name}` ), 0,readErr);
+                  
                 } else {
-                  fs.rename(
-                    path.join(
-                      __dirname,
-                      "task-3",
-                      `new_${file1.name}`,
-                      `${file2.name}`
-                    ),
-                    path.join(
-                      __dirname,
-                      "task-3",
-                      `new_${file1.name}`,
-                      `new_${file2.name}`
-                    ),
+
+                    fs.rename(
+                    path.join(  __dirname, "task-3",`new_${file1.name}`,`${file2.name}` ),
+                    path.join(__dirname, "task-3", `new_${file1.name}`, `new_${file2.name}`),
                     readErr
                   );
                 }
@@ -214,6 +205,38 @@ function readData() {
   );
 }
 
-deleteDir();
-createFolders();
+// deleteDir();
+// createFolders();
 // readData();
+
+// recursion ??
+
+// function readDataRecursion (fileName = '') {
+//    fs.readdir( path.join(__dirname, "task-3",fileName),{ withFileTypes: true },
+//          (err, listOfFiles1) => {
+//           readErr(err);
+    
+//           listOfFiles1.forEach( (file1) => {
+//             console.log(file1.name);
+    
+//             if (file1.isFile()) {
+//               fs.truncate(
+//                 path.join(__dirname, "task-3", `${file1.name}`),
+//                 0,
+//                 readErr
+//               );
+//             } else {
+//                fs.rename(
+//                 path.join(__dirname, "task-3", `${file1.name}`),
+//                 path.join(__dirname, "task-3", `new_${file1.name}`),
+//                 readErr
+//               );
+//               readDataRecursion (`new_${file1.name}`)
+//               }
+//             }
+//           )
+//         }
+        
+//   )}
+
+// readDataRecursion();
