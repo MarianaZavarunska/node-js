@@ -142,6 +142,10 @@ function createFolders() {
   }
 }
 
+function deleteDir() {
+  fs.rm(path.join(__dirname, "task-3"), { recursive: true }, readErr);
+}
+
 // і напишіть функцію яка буде зчитувати папку і перевіряти якщо дані які в ній лежать - це файли тоді вам потрібно їх очистити, але не видаляти, якщо дані - це папки, вам потрібно їх перейменувати і додати до назви префікс _new
 
 function readData() {
@@ -210,4 +214,6 @@ function readData() {
   );
 }
 
+deleteDir();
+createFolders();
 // readData();
