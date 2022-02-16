@@ -205,7 +205,7 @@ function readData() {
   );
 }
 
-// deleteDir();
+deleteDir();
 // createFolders();
 // readData();
 
