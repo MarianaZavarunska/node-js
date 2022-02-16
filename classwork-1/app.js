@@ -108,50 +108,39 @@ const { debuglog } = require("util");
 
 // 3. Створіть папку (можете вручну) напишіть скріпт який створить в ній якись дані (можуть бути нові папки і файли(в файли запишіть якусь дату) )
 
-// fs.mkdir(path.join(__dirname, "task-3"), (err) => {
-//   if (err) {
-//     console.log(err);
-//     throw err;
-//   }
-// });
+const readErr = (err) => {
+  if (err) {
+    console.log(err);
+    throw err;
+  }
+};
 
-// for (i = 6; i > 0; i--) {
-//   fs.mkdir(
-//     path.join(__dirname, "task-3", `folder_${i}`),
-//     { recursive: true },
-//     (err) => {
-//       if (err) {
-//         console.log(err);
-//         throw err;
-//       }
-//     }
-//   );
+function createFolders() {
+  fs.mkdir(path.join(__dirname, "task-3"), readErr);
 
-//   if (i <= 4) {
-//     fs.mkdir(
-//       path.join(__dirname, "task-3", `folder_${i}`, `folder_${i - 1}`),
-//       { recursive: true },
-//       (err) => {
-//         if (err) {
-//           console.log(err);
-//           throw err;
-//         }
-//       }
-//     );
-//   }
-//   if (i <= 2) {
-//     fs.writeFile(
-//       path.join(__dirname, "task-3", `folder_${i}`, `file_${i - 1}.txt`),
-//       `new data${i}`,
-//       (err) => {
-//         if (err) {
-//           console.log(err);
-//           throw err;
-//         }
-//       }
-//     );
-//   }
-// }
+  for (i = 6; i > 0; i--) {
+    fs.mkdir(
+      path.join(__dirname, "task-3", `folder_${i}`),
+      { recursive: true },
+      readErr
+    );
+
+    if (i <= 4) {
+      fs.mkdir(
+        path.join(__dirname, "task-3", `folder_${i}`, `folder_${i - 1}`),
+        { recursive: true },
+        readErr
+      );
+    }
+    if (i <= 2) {
+      fs.writeFile(
+        path.join(__dirname, "task-3", `folder_${i}`, `file_${i - 1}.txt`),
+        `new data${i}`,
+        readErr
+      );
+    }
+  }
+}
 
 // і напишіть функцію яка буде зчитувати папку і перевіряти якщо дані які в ній лежать - це файли тоді вам потрібно їх очистити, але не видаляти, якщо дані - це папки, вам потрібно їх перейменувати і додати до назви префікс _new
 
@@ -160,82 +149,56 @@ function readData() {
     path.join(__dirname, "task-3"),
     { withFileTypes: true },
     (err, listOfFiles) => {
-      if (err) {
-        console.log(err);
-        throw err;
-      }
+      readErr(err);
+
       listOfFiles.forEach((file1) => {
         console.log(file1.name);
         if (file1.isFile()) {
           fs.truncate(
             path.join(__dirname, "task-3", `${file1.name}`),
             0,
-            (err) => {
-              if (err) {
-                console.log(err);
-                throw err;
-              }
-              console.log("done1");
-            }
+            readErr
           );
         } else {
           fs.rename(
             path.join(__dirname, "task-3", `${file1.name}`),
             path.join(__dirname, "task-3", `new_${file1.name}`),
-            (err) => {
-              if (err) {
-                console.log(err);
-                throw err;
-              }
-            }
+            readErr
           );
           fs.readdir(
             path.join(__dirname, "task-3", `${file1.name}`),
             { withFileTypes: true },
             (err, listOfFiles2) => {
-              if (err) {
-                console.log(err);
-                throw err;
-              }
+              readErr(err);
+
               listOfFiles2.forEach((file2) => {
-                console.log(file2);
+                console.log(file2.name);
                 if (file2.isFile()) {
                   fs.truncate(
                     path.join(
                       __dirname,
                       "task-3",
-                      `${file1.name}`,
+                      `new_${file1.name}`,
                       `${file2.name}`
                     ),
                     0,
-                    (err) => {
-                      if (err) {
-                        console.log(err);
-                        throw err;
-                      }
-                      console.log("done2");
-                    }
+                    readErr
                   );
                 } else {
                   fs.rename(
                     path.join(
                       __dirname,
                       "task-3",
-                      `${file1.name}`,
+                      `new_${file1.name}`,
                       `${file2.name}`
                     ),
                     path.join(
                       __dirname,
                       "task-3",
-                      `${file1.name}`,
-                      `${file2.name}`
+                      `new_${file1.name}`,
+                      `new_${file2.name}`
                     ),
-                    (err) => {
-                      if (err) {
-                        console.log(err);
-                        throw err;
-                      }
-                    }
+                    readErr
                   );
                 }
               });
@@ -247,4 +210,4 @@ function readData() {
   );
 }
 
-readData();
+// readData();
