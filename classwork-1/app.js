@@ -7,44 +7,41 @@ const fs = require("fs");
 
 // 1. Спробуйте створити якийсь файл txt, прочитайте з нього дані і одразу, дані які ви отримали запишіть їх в інший файл.
 
-// fs.mkdir(path.join(__dirname, "task-1"), (err) => {
-//   if (err) {
-//     console.log(err);
-//     throw err;
-//   }
-// });
+fs.mkdir(path.join(__dirname, "task-1"), (err) => {
+  if (err) {
+    console.log(err);
+    throw err;
+  }
+    fs.writeFile(
+    path.join(__dirname, "task-1", "file-1.txt"),
+    "NEW_DATA",
+    (err) => {
+        if (err) {
+        console.log(err);
+        throw err;
+        }
+        fs.readFile(path.join(__dirname, "task-1", "file-1.txt"), (err, data) => {
+        if (err) {
+        console.log(err);
+        throw err;
+        }
+          if (data){
+          fs.writeFile(
+          path.join(__dirname, "task-1", "file-2.txt"),
+          `${data}`,
+           (err) => {
+            if (err) {
+              console.log(err);
+              throw err;
+            }
+          }
+        );
+      }
+    }
+  )
+  })
 
-// fs.writeFile(
-//   path.join(__dirname, "task-1", "file-1.txt"),
-//   "NEW_DATA",
-//   (err) => {
-//     if (err) {
-//       console.log(err);
-//       throw err;
-//     }
-
-//     fs.readFile(path.join(__dirname, "task-1", "file-1.txt"), (err, data) => {
-//       if (err) {
-//         console.log(err);
-//         throw err;
-//       }
-
-//       if (data) {
-//         fs.writeFile(
-//           path.join(__dirname, "task-1", "file-2.txt"),
-//           `${data}`,
-//           (err) => {
-//             if (err) {
-//               console.log(err);
-//               throw err;
-//             }
-//           }
-//         );
-//       }
-//     });
-//   }
-// );
-
+})
 // console.log("====Task 2====");
 
 // 2. Створіть файл ( можете вручну ) заповніть його якимись даними
@@ -205,7 +202,7 @@ function readData() {
   );
 }
 
-deleteDir();
+// deleteDir();
 // createFolders();
 // readData();
 
