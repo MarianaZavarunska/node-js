@@ -17,6 +17,7 @@ app.set("views", path.join(__dirname, "static", "hbs")); // where all hbs
 
 const users = [
     {
+        id: '1',
         firstName: "Monica",
         lastName: "Geller",
         email: "monica@example.com",
@@ -25,6 +26,7 @@ const users = [
         city: "New York",
     },
     {
+        id: '2',
         firstName: "Joey",
         lastName: "Tribiani",
         email: "joey@example.com",
@@ -33,6 +35,7 @@ const users = [
         city: "Chicago",
     },
     {
+        id: '3',
         firstName: "Rachel",
         lastName: "Green",
         email: "rachel@example.com",
@@ -41,6 +44,7 @@ const users = [
         city: "New York",
     },
     {
+        id: '4',
         firstName: "Phoebe",
         lastName: "Buffay",
         email: "phoebe@example.com",
@@ -49,6 +53,7 @@ const users = [
         city: "Chicago",
     },
     {
+        id: '5',
         firstName: "Chandler",
         lastName: "Bing",
         email: "chandler@example.com",
@@ -57,6 +62,7 @@ const users = [
         city: "LA",
     },
     {
+        id: '6',
         firstName: "Ross",
         lastName: "Geller",
         email: "ross@example.com",
@@ -65,6 +71,7 @@ const users = [
         city: "San Diego",
     },
     {
+        id: '7',
         firstName: "Gunther",
         lastName: "Geller",
         email: "gunther@example.com",
@@ -87,15 +94,26 @@ app.get("/errEmail", (req, res) => {
     res.render("errEmail");
 });
 
+app.get("/users/:userId", (req, res) => {
+    console.log(req.params);
+    const { userId } = req.params;
+    let index = users.findIndex((user) => user.id === userId);
+
+    res.render("userDetails", { user: users[index] });
+})
+
 app.post("/login", (req, res) => {
 
     let index = users.findIndex(
         (user) => user.email === req.body.email.toLowerCase()
     );
 
-    index === -1
-        ? users.push(req.body) && res.redirect("/users")
-        : res.redirect("/errEmail");
+    if (index === -1) {
+        req.body['id'] = new Date().getTime();
+        users.push(req.body) && res.redirect("/users");
+    } else {
+        res.redirect("/errEmail");
+    }
 });
 
 app.post("/users", (req, res) => {
@@ -109,7 +127,7 @@ app.post("/users", (req, res) => {
     if (req.body.cityFilter) {
         filteredUsers = filteredUsers.filter(user => user.city.toLowerCase() === req.body.cityFilter.toLowerCase());
     }
-    res.render("users", { users: filteredUsers, ageFilter: req.body.ageFilter, cityFilter: req.body.cityFilter });
+    res.render("users", { 'users': filteredUsers, 'ageFilter': req.body.ageFilter, 'cityFilter': req.body.cityFilter });
 
 })
 

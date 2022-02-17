@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div class="filter-container">
+    <div class="filter-form">
         <form action="/users" method="post">
             <label>Age: <input type='text' name="ageFilter" /></label>
             <label>City: <input type='text' name="cityFilter" /></label>
@@ -18,10 +18,11 @@
         </form>
 
     </div>
-    <span>{{ ageFilter}};
-        {{cityFilter}}
-    </span>
-
+    <div class="filter-container">
+        <div>Age: {{ageFilter}}</div>
+        <div>City: {{cityFilter}}</div>
+        <a href="/users">Clear</a>
+    </div>
 
     <div class="users-container">
         {{#each users}}
@@ -32,9 +33,10 @@
             <div>Password:<span>{{this.password}}</span></div>
             <div>Age:<span>{{this.age}}</span></div>
             <div>City: <span>{{this.city}}</span></div>
+            <a href="/users/{{this.id}}">Get Details</a>
         </div>
 
-
+        {{/each}}
     </div>
 
 

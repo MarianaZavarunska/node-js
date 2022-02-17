@@ -17,3 +17,30 @@
   font-weight: 600;
   margin-left: 10px;
 }
+.filter-form > form > input[type="submit"] {
+  width: 100px;
+  background-color: #000;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.filter-container > div,
+.filter-container > a {
+  width: 100px;
+  background-color: #000;
+  color: #fff;
+  padding: 5px;
+  margin: 5px;
+}
+.filter-container > a {
+  font-size: 1.2rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: center;
+  background-color: red;
+}
