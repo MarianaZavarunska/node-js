@@ -110,7 +110,8 @@ app.post("/login", (req, res) => {
 
     if (index === -1) {
         req.body['id'] = new Date().getTime();
-        users.push(req.body) && res.redirect("/users");
+        users.push(req.body);
+        res.redirect("/users");
     } else {
         res.redirect("/errEmail");
     }
