@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/users.css">
+    <title>Users Page</title>
+</head>
+
+<body>
+    <div class="filter-container">
+        <form action="/users" method="post">
+            <label>Age: <input type='text' name="ageFilter" /></label>
+            <label>City: <input type='text' name="cityFilter" /></label>
+            <input type="submit" value="Filter" />
+        </form>
+
+    </div>
+    <span>{{ ageFilter}};
+        {{cityFilter}}
+    </span>
+
+
+    <div class="users-container">
+        {{#each users}}
+        <div class="user-container">
+            <div>FirstName: <span>{{this.firstName}}</span></div>
+            <div>LastName: <span>{{this.lastName}}</span></div>
+            <div>Email:<span>{{this.email}}</span></div>
+            <div>Password:<span>{{this.password}}</span></div>
+            <div>Age:<span>{{this.age}}</span></div>
+            <div>City: <span>{{this.city}}</span></div>
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

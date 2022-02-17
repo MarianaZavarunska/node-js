@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/login.css">
+    <title>Login Page</title>
+</head>
+
+<body>
+
+    {{!-- поля які треба відрендерити в файлі hbs: firstName, lastName, email(унікальне поле), password, age, city --}}
+
+    <form action="/login" method="post" class="form-container">
+
+        <label>FirstName:<input type="text" name="firstName" required /></label>
+        <label>LastName: <input type=" text" name="lastName" /></label>
+        <label> Email: <input type="text" name="email" required /></label>
+        <label> Password: <input type="text" name="password" /></label>
+        <label> Age: <input type="text" name="age" required /></label>
+        <label> City: <input type="text" name="city" required /></label>
+
+        <input type="submit" value="Send" />
+    </form>
+</body>
+
+</html>
