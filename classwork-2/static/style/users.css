@@ -1,0 +1,53 @@
+.users-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.user-container {
+  width: 300px;
+  border: 1px solid #000;
+  padding: 10px;
+  margin: 10px;
+}
+.user-container > div {
+  font-size: 1.1rem;
+  margin: 10px;
+}
+.user-container > div > span {
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.user-container > a {
+  text-decoration: none;
+  padding: 5px;
+}
+
+.filter-form > form > input[type="submit"],
+.user-container > a {
+  width: 100px;
+  background-color: #000;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.filter-container > div,
+.filter-container > a {
+  width: 100px;
+  background-color: #000;
+  color: #fff;
+  padding: 5px;
+  margin: 5px;
+}
+.filter-container > a {
+  font-size: 1.2rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: center;
+  background-color: red;
+}
