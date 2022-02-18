@@ -17,7 +17,7 @@ app.set("views", path.join(__dirname, "static", "hbs")); // where all hbs
 
 const users = [
     {
-        id: 1,
+        id: 11,
         firstName: "Monica",
         lastName: "Geller",
         email: "monica@example.com",
@@ -26,7 +26,7 @@ const users = [
         city: "New York",
     },
     {
-        id: 2,
+        id: 22,
         firstName: "Joey",
         lastName: "Tribiani",
         email: "joey@example.com",
@@ -35,7 +35,7 @@ const users = [
         city: "Chicago",
     },
     {
-        id: 3,
+        id: 33,
         firstName: "Rachel",
         lastName: "Green",
         email: "rachel@example.com",
@@ -44,7 +44,7 @@ const users = [
         city: "New York",
     },
     {
-        id: 4,
+        id: 44,
         firstName: "Phoebe",
         lastName: "Buffay",
         email: "phoebe@example.com",
@@ -53,7 +53,7 @@ const users = [
         city: "Chicago",
     },
     {
-        id: 5,
+        id: 55,
         firstName: "Chandler",
         lastName: "Bing",
         email: "chandler@example.com",
@@ -62,7 +62,7 @@ const users = [
         city: "LA",
     },
     {
-        id: 6,
+        id: 66,
         firstName: "Ross",
         lastName: "Geller",
         email: "ross@example.com",
@@ -71,7 +71,7 @@ const users = [
         city: "San Diego",
     },
     {
-        id: 7,
+        id: 77,
         firstName: "Gunther",
         lastName: "Geller",
         email: "gunther@example.com",
@@ -106,6 +106,14 @@ app.get("/users/:userId", (req, res) => {
 
 app.get("/signIn", (_, res) => {
     res.render("signIn");
+})
+
+app.post("/deleteUser/:userId", (req, res) => {
+    const { userId } = req.params;
+
+    let index = users.findIndex(user => user.id === Number(userId));
+    users.splice(index, 1);
+    res.redirect("/users")
 })
 
 app.post("/signIn", (req, res) => {
