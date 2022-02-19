@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const signInController = require("../controllers/signIn.controller");
-const isValidSignInData = require("../middleware/isValidSignInData");
+const isValidSignInData = require("../middlewares/isValidSignInData");
 
 const signInRouter = Router();
 
