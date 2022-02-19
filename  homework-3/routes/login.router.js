@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const loginController = require("../controllers/login.controller");
-const loginMiddleware = require("../middleware/isValidUser");
+const loginMiddleware = require("../middlewares/isValidUser");
 
 const loginRouter = Router();
 
