@@ -8,6 +8,7 @@ class loginConroller {
     }
 
     addNewUser(req, res) {
+
         req.body['id'] = new Date().getTime();
         users.push(req.body);
         res.redirect("/users");

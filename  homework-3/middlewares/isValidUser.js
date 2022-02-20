@@ -1,3 +1,5 @@
+const url = require('url');
+
 const users = require('../db/users');
 
 function isValidUser(req, res, next) {
@@ -17,12 +19,11 @@ function isValidUser(req, res, next) {
         next();
 
     } catch (error) {
-        console.log(error);
-        res.status(400).send(error.message);
-        // res.status(400).render("errEmail");
+        let err = encodeURIComponent(error.message);
+
+        res.redirect("/errEmail" + '?err=' + err);
+
     }
-
-
 }
 
 module.exports = isValidUser;
