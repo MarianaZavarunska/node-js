@@ -1,8 +1,4 @@
-const url = require('url');
-
 const usersService = require('../services/users.services');
-
-// const users = require('../db/users');
 
 async function isValidUser(req, res, next) {
     try {
@@ -12,16 +8,12 @@ async function isValidUser(req, res, next) {
             (user) => user.email === req.body.email.toLowerCase()
         );
 
-        if (index !== -1) {
-            throw new Error('Login has already existed!');
-        }
+        if (index !== -1) throw new Error('Login has already existed!');
 
-        if (req.body.password.length < 3) {
-            throw new Error('Password should consist more than 3 chars!');
-        }
-        if (!req.body.email || !req.body.email.includes('@')) {
-            throw new Error('Incorrect email');
-        }
+        if (req.body.password.length < 3) throw new Error('Password should consist more than 3 chars!');
+
+        if (!req.body.email || !req.body.email.includes('@')) throw new Error('Incorrect email');
+
         next();
 
     } catch (error) {

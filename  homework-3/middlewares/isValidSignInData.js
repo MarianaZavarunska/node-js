@@ -1,5 +1,3 @@
-// const users = require("../db/users");
-
 const usersService = require('../services/users.services');
 
 async function isValidSignInData(req, res, next) {
@@ -13,10 +11,8 @@ async function isValidSignInData(req, res, next) {
                 && user.password === req.body.password
         );
 
-        if (index === -1) {
-            console.log('User not found');
-            throw new Error('Your email or password is invalid!');
-        }
+        if (index === -1) throw new Error('Your email or password is invalid!');
+
         req.index = index;
 
         next();
