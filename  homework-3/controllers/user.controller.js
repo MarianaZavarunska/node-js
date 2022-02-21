@@ -1,12 +1,17 @@
-const users = require("../db/users");
+const usersService = require('../services/users.services');
+
 
 class userController {
-    renderUsers(req, res) {
-        res.render('users', { users });
+    async renderUsers(req, res) {
+        let users = await usersService.readFile();
+
+        res.render('users', {users});
+
     }
 
-    filterUsers(req, res) {
-        let filteredUsers = users;
+    async filterUsers(req, res) {
+
+        let filteredUsers = await usersService.readFile();
 
         if (req.body.ageFilter) {
             filteredUsers = filteredUsers.filter(user => user.age === req.body.ageFilter);
@@ -14,24 +19,31 @@ class userController {
         if (req.body.cityFilter) {
             filteredUsers = filteredUsers.filter(user => user.city.toLowerCase() === req.body.cityFilter.toLowerCase());
         }
-        res.render("users", { 'users': filteredUsers, 'ageFilter': req.body.ageFilter, 'cityFilter': req.body.cityFilter });
+        res.render('users', {
+            'users': filteredUsers,
+            'ageFilter': req.body.ageFilter,
+            'cityFilter': req.body.cityFilter
+        });
     }
 
-    getUserById(req, res) {
+    async getUserById(req, res) {
+        let users = await usersService.readFile();
 
-        const { userId } = req.params;
+        const {userId} = req.params;
         let index = users.findIndex((user) => user.id === +userId);
 
-        res.render("userDetails", { user: users[index] });
+        res.render('userDetails', {user: users[index]});
     }
 
-    deleteUserById(req, res) {
-        const { userId } = req.params;
+    async deleteUserById(req, res) {
+        let users = await usersService.readFile();
+        const {userId} = req.params;
 
         let index = users.findIndex(user => user.id === Number(userId));
         users.splice(index, 1);
+        await usersService.overWriteFile(users);
 
-        res.redirect("/users");
+        res.redirect('/users');
     }
 
 }

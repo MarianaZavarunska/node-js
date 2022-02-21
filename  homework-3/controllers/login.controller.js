@@ -1,20 +1,23 @@
-const users = require("../db/users");
+const usersService = require('../services/users.services');
 
-class loginConroller {
+class loginController {
 
     renderAddUser(_, res) {
 
-        res.render("login");
+        res.render('login');
     }
 
-    addNewUser(req, res) {
+    async addNewUser(req, res) {
+
+        let users = await usersService.readFile();
 
         req.body['id'] = new Date().getTime();
         users.push(req.body);
-        res.redirect("/users");
+        await usersService.overWriteFile(users);
+        res.redirect('/users');
     }
 
 
 }
 
-module.exports = new loginConroller();
+module.exports = new loginController();

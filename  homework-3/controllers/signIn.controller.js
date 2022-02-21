@@ -1,12 +1,13 @@
-const users = require("../db/users");
+const usersService = require('../services/users.services');
 
 class signInController {
     renderForm(_, res) {
-        res.render("signIn");
+        res.render('signIn');
     }
 
-    showUser(req, res) {
-        res.render("userDetails", { user: users[req.index] });
+    async showUser(req, res) {
+        let users = await usersService.readFile();
+        res.render('userDetails', {user: users[req.index]});
     }
 }
 

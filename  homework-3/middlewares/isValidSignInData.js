@@ -1,17 +1,21 @@
-const users = require("../db/users");
+// const users = require("../db/users");
 
-function isValidSignInData(req, res, next) {
+const usersService = require('../services/users.services');
+
+async function isValidSignInData(req, res, next) {
     try {
+        let users = await usersService.readFile();
+
         let index = users.findIndex(
             (user) =>
 
-                user.email === req.body.email.toLowerCase()
-                && user.password === req.body.password.toLowerCase()
+                user.email === req.body.email
+                && user.password === req.body.password
         );
 
         if (index === -1) {
             console.log('User not found');
-            throw new Error("Your email or password is invalid!");
+            throw new Error('Your email or password is invalid!');
         }
         req.index = index;
 
@@ -21,7 +25,7 @@ function isValidSignInData(req, res, next) {
 
         let err = encodeURIComponent(error.message);
 
-        res.redirect("/errEmail" + '?err=' + err);
+        res.redirect('/errEmail' + '?err=' + err);
     }
 
 }
