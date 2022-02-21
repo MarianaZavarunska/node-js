@@ -1,9 +1,13 @@
 const url = require('url');
 
-const users = require('../db/users');
+const usersService = require('../services/users.services');
 
-function isValidUser(req, res, next) {
+// const users = require('../db/users');
+
+async function isValidUser(req, res, next) {
     try {
+        let users = await usersService.readFile();
+
         let index = users.findIndex(
             (user) => user.email === req.body.email.toLowerCase()
         );
@@ -15,13 +19,15 @@ function isValidUser(req, res, next) {
         if (req.body.password.length < 3) {
             throw new Error('Password should consist more than 3 chars!');
         }
-
+        if (!req.body.email || !req.body.email.includes('@')) {
+            throw new Error('Incorrect email');
+        }
         next();
 
     } catch (error) {
         let err = encodeURIComponent(error.message);
 
-        res.redirect("/errEmail" + '?err=' + err);
+        res.redirect('/errEmail' + '?err=' + err);
 
     }
 }
