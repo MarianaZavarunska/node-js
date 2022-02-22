@@ -1,0 +1,20 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "zavarunska",
+  "password": "1996",
+  "database": "zavarunska",
+  "synchronize": true,
+  "logging": false,
+  "entities": [
+  ],
+  "migrations": [
+    "./src/migration/**/*.ts"
+  ],
+  "subscribers": [
+  ],
+  "cli": {
+    "migrationsDir": "src/migration"
+  }
+}
