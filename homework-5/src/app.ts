@@ -3,6 +3,8 @@ import express, { Request, Response } from 'express';
 import { createConnection, getManager } from 'typeorm';
 
 import { User } from './entity/user';
+import { Comment } from './entity/comments';
+import { Post } from './entity/post';
 
 const app = express();
 app.use(express.json());
@@ -34,6 +36,27 @@ app.delete('/users/:id', async (req:Request, res: Response) => {
         { id: Number(id) },
     );
     res.json(deletedUser);
+});
+
+app.get('/comments', async (req:Request, res:Response) => {
+    const comments = await getManager().getRepository(Comment).find();
+    res.json(comments);
+});
+
+app.get('posts/:userId', async (req:Request, res:Response) => {
+    const { userId } = req.params;
+    const posts = await getManager().getRepository(Post).createQueryBuilder('post')
+        .where('post.userId = :userId', { userId })
+        .getOne();
+    res.json(posts);
+});
+
+app.patch('posts/:userId', async (req:Request, res:Response) => {
+    const { userId } = req.params;
+    const posts = await getManager().getRepository(Post).createQueryBuilder('post')
+        .where('post.userId = :userId', { userId })
+        .getOne();
+    res.json(posts);
 });
 
 app.listen(5400, async () => {

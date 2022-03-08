@@ -7,6 +7,8 @@ require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const typeorm_1 = require("typeorm");
 const user_1 = require("./entity/user");
+const comments_1 = require("./entity/comments");
+const post_1 = require("./entity/post");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded());
@@ -28,6 +30,24 @@ app.delete('/users/:id', async (req, res) => {
     const { id } = req.params;
     const deletedUser = await (0, typeorm_1.getManager)().getRepository(user_1.User).softDelete({ id: Number(id) });
     res.json(deletedUser);
+});
+app.get('/comments', async (req, res) => {
+    const comments = await (0, typeorm_1.getManager)().getRepository(comments_1.Comment).find();
+    res.json(comments);
+});
+app.get('posts/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const posts = await (0, typeorm_1.getManager)().getRepository(post_1.Post).createQueryBuilder('post')
+        .where('post.userId = :userId', { userId })
+        .getOne();
+    res.json(posts);
+});
+app.patch('posts/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const posts = await (0, typeorm_1.getManager)().getRepository(post_1.Post).createQueryBuilder('post')
+        .where('post.userId = :userId', { userId })
+        .getOne();
+    res.json(posts);
 });
 app.listen(5400, async () => {
     console.log('Server has started again 🚀');

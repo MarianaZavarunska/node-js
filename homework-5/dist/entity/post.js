@@ -13,6 +13,7 @@ exports.Post = void 0;
 const typeorm_1 = require("typeorm");
 const commonFields_1 = require("./commonFields");
 const user_1 = require("./user");
+const comments_1 = require("./comments");
 let Post = class Post extends commonFields_1.CommonFields {
 };
 __decorate([
@@ -43,6 +44,10 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'userId' }),
     __metadata("design:type", user_1.User)
 ], Post.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => comments_1.Comment, (comment) => comment.post),
+    __metadata("design:type", Array)
+], Post.prototype, "comments", void 0);
 Post = __decorate([
     (0, typeorm_1.Entity)('Post', { database: 'Zavarunska' })
 ], Post);
