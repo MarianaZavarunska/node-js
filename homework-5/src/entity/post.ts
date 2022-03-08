@@ -13,7 +13,7 @@ export interface IPost {
     comments: any[],
 }
 
-@Entity('Post', { database: 'Zavarunska' })
+@Entity('Posts', { database: 'Zavarunska' })
 export class Post extends CommonFields implements IPost {
     @Column({
         type: 'varchar',

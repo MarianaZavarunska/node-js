@@ -31,23 +31,32 @@ app.delete('/users/:id', async (req, res) => {
     const deletedUser = await (0, typeorm_1.getManager)().getRepository(user_1.User).softDelete({ id: Number(id) });
     res.json(deletedUser);
 });
+app.get('/posts/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const posts = await (0, typeorm_1.getManager)().getRepository(post_1.Post).createQueryBuilder('post')
+        .where('post.userId = :userId', { userId })
+        .getMany();
+    res.json(posts);
+});
+app.patch('/posts/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const { content } = req.body;
+    console.log(userId);
+    const updatedPost = await (0, typeorm_1.getManager)().getRepository(post_1.Post).update({ userId: Number(userId) }, { content });
+    res.json(updatedPost);
+});
 app.get('/comments', async (req, res) => {
     const comments = await (0, typeorm_1.getManager)().getRepository(comments_1.Comment).find();
     res.json(comments);
 });
-app.get('posts/:userId', async (req, res) => {
+app.get('/comments/:userId', async (req, res) => {
     const { userId } = req.params;
-    const posts = await (0, typeorm_1.getManager)().getRepository(post_1.Post).createQueryBuilder('post')
-        .where('post.userId = :userId', { userId })
-        .getOne();
-    res.json(posts);
-});
-app.patch('posts/:userId', async (req, res) => {
-    const { userId } = req.params;
-    const posts = await (0, typeorm_1.getManager)().getRepository(post_1.Post).createQueryBuilder('post')
-        .where('post.userId = :userId', { userId })
-        .getOne();
-    res.json(posts);
+    const commentsByUserId = await (0, typeorm_1.getManager)().getRepository(comments_1.Comment).createQueryBuilder('comment')
+        .leftJoinAndSelect('comment.post', 'post')
+        .where('comment.authorId = :userId', { userId })
+        .andWhere('post.id = comment.postId')
+        .getMany();
+    res.json(commentsByUserId);
 });
 app.listen(5400, async () => {
     console.log('Server has started again 🚀');
