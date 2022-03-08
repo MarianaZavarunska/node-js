@@ -36,11 +36,13 @@ export class Comment extends CommonFields implements IComments {
 
     @Column({
         type: 'int',
+
     })
         likes: number;
 
     @Column({
         type: 'int',
+
     })
         dislikes: number;
 

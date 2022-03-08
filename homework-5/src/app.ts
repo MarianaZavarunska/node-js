@@ -38,6 +38,8 @@ app.delete('/users/:id', async (req:Request, res: Response) => {
     res.json(deletedUser);
 });
 
+// TASK 3
+
 app.get('/posts/:userId', async (req:Request, res:Response) => {
     const { userId } = req.params;
     const posts = await getManager().getRepository(Post).createQueryBuilder('post')
@@ -45,6 +47,8 @@ app.get('/posts/:userId', async (req:Request, res:Response) => {
         .getMany();
     res.json(posts);
 });
+
+// TASK 4
 
 app.patch('/posts/:userId', async (req:Request, res:Response) => {
     const { userId } = req.params;
@@ -62,6 +66,8 @@ app.get('/comments', async (req:Request, res:Response) => {
     res.json(comments);
 });
 
+// TASK 5
+
 app.get('/comments/:userId', async (req:Request, res:Response) => {
     const { userId } = req.params;
     const commentsByUserId = await getManager().getRepository(Comment).createQueryBuilder('comment')
@@ -70,6 +76,36 @@ app.get('/comments/:userId', async (req:Request, res:Response) => {
         .andWhere('post.id = comment.postId')
         .getMany();
     res.json(commentsByUserId);
+});
+
+// TASK 6
+
+app.patch('/comments/action', async (req:Request, res:Response) => {
+    const { commentId, action } = req.body;
+    const commentById = await getManager().getRepository(Comment).findOne({
+        where: { id: Number(commentId) },
+    });
+    // if (action === 'like') {
+    //     const updatedComment = await getManager().getRepository(Comment).update(
+    //         { id: Number(commentId) },
+    //         { likes: commentById?.likes ? commentById.likes + 1 : 1 },
+    //     );
+    //     res.json(updatedComment);
+    // }
+    // if (action === 'dislike') {
+    //     const updatedComment = await getManager().getRepository(Comment).update(
+    //         { id: Number(commentId) },
+    //         { dislikes: commentById?.dislikes ? commentById.dislikes + 1 : 1 },
+    //     );
+    //     res.json(updatedComment);
+    // }
+    const updatedComment = await getManager().getRepository(Comment).update(
+        { id: Number(commentId) },
+        action === 'like'
+            ? { likes: commentById?.likes ? commentById.likes + 1 : 1 }
+            : { dislikes: commentById?.dislikes ? commentById.dislikes + 1 : 1 },
+    );
+    res.json(updatedComment);
 });
 
 app.listen(5400, async () => {

@@ -9,7 +9,7 @@ class CreateTableComments1646736700498 {
            text VARCHAR(250) NOT NULL,
            authorId INT,
            postId INT,
-           likes INT  DEFAULT 0,
+           likes INT  DEFAULT 0 ,
            dislikes INT DEFAULT 0,
            createdAt TIMESTAMP DEFAULT(UTC_TIMESTAMP()) NOT NULL,
            deletedAt TIMESTAMP,

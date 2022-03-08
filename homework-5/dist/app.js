@@ -31,6 +31,7 @@ app.delete('/users/:id', async (req, res) => {
     const deletedUser = await (0, typeorm_1.getManager)().getRepository(user_1.User).softDelete({ id: Number(id) });
     res.json(deletedUser);
 });
+// TASK 3
 app.get('/posts/:userId', async (req, res) => {
     const { userId } = req.params;
     const posts = await (0, typeorm_1.getManager)().getRepository(post_1.Post).createQueryBuilder('post')
@@ -38,6 +39,7 @@ app.get('/posts/:userId', async (req, res) => {
         .getMany();
     res.json(posts);
 });
+// TASK 4
 app.patch('/posts/:userId', async (req, res) => {
     const { userId } = req.params;
     const { content } = req.body;
@@ -49,6 +51,7 @@ app.get('/comments', async (req, res) => {
     const comments = await (0, typeorm_1.getManager)().getRepository(comments_1.Comment).find();
     res.json(comments);
 });
+// TASK 5
 app.get('/comments/:userId', async (req, res) => {
     const { userId } = req.params;
     const commentsByUserId = await (0, typeorm_1.getManager)().getRepository(comments_1.Comment).createQueryBuilder('comment')
@@ -57,6 +60,31 @@ app.get('/comments/:userId', async (req, res) => {
         .andWhere('post.id = comment.postId')
         .getMany();
     res.json(commentsByUserId);
+});
+// TASK 6
+app.patch('/comments/action', async (req, res) => {
+    const { commentId, action } = req.body;
+    const commentById = await (0, typeorm_1.getManager)().getRepository(comments_1.Comment).findOne({
+        where: { id: Number(commentId) },
+    });
+    // if (action === 'like') {
+    //     const updatedComment = await getManager().getRepository(Comment).update(
+    //         { id: Number(commentId) },
+    //         { likes: commentById?.likes ? commentById.likes + 1 : 1 },
+    //     );
+    //     res.json(updatedComment);
+    // }
+    // if (action === 'dislike') {
+    //     const updatedComment = await getManager().getRepository(Comment).update(
+    //         { id: Number(commentId) },
+    //         { dislikes: commentById?.dislikes ? commentById.dislikes + 1 : 1 },
+    //     );
+    //     res.json(updatedComment);
+    // }
+    const updatedComment = await (0, typeorm_1.getManager)().getRepository(comments_1.Comment).update({ id: Number(commentId) }, action === 'like'
+        ? { likes: commentById?.likes ? commentById.likes + 1 : 1 }
+        : { dislikes: commentById?.dislikes ? commentById.dislikes + 1 : 1 });
+    res.json(updatedComment);
 });
 app.listen(5400, async () => {
     console.log('Server has started again 🚀');
