@@ -6,6 +6,7 @@
   "password": "rootroot",
   "database": "Zavarunska",
   "synchronize": true,
+  "migrationsRun": true,
   "logging": false,
   "entities": [
     "src/entity/**/*.ts"
@@ -16,6 +17,7 @@
   "subscribers": [
   ],
   "cli": {
-    "migrationsDir": "src/migration"
+    "migrationsDir": "src/migration",
+    "entitiesDir": "src/entity"
   }
 }
