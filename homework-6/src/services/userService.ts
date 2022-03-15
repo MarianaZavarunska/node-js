@@ -1,27 +1,42 @@
+import bcrypt from 'bcrypt';
 import { UpdateResult } from 'typeorm';
 
 import { IUser, User } from '../entity/user';
 import { userRepository } from '../repositories/user/userRepository';
 
 class UserService {
-    async getAllUsers(): Promise<IUser[]> {
+    public async getAllUsers(): Promise<IUser[]> {
         const users = await userRepository.getAllUsers();
         return users;
     }
 
-    async createUser(user: IUser): Promise<IUser> {
-        const newUser = await userRepository.createUser(user);
+    public async getUserByEmail(email: string): Promise<IUser | undefined> {
+        const user = await userRepository.getUserByEmail(email);
+        return user;
+    }
+
+    public async createUser(user: IUser): Promise<IUser> {
+        const { password } = user;
+
+        const hashedPassword = await this._hashPassword(password);
+        const dataToSave = { ...user, password: hashedPassword };
+
+        const newUser = await userRepository.createUser(dataToSave);
         return newUser;
     }
 
-    async updateById(updatedUserProp:Partial<User>): Promise<UpdateResult> {
+    public async updateById(updatedUserProp:Partial<User>): Promise<UpdateResult> {
         const updatedUser = await userRepository.updatedById(updatedUserProp);
         return updatedUser;
     }
 
-    async deleteById(id:string): Promise<UpdateResult> {
+    public async deleteById(id:string): Promise<UpdateResult> {
         const deletedUser = await userRepository.deleteById(+id);
         return deletedUser;
+    }
+
+    private async _hashPassword(password:string): Promise<string> {
+        return bcrypt.hash(password, 10);
     }
 }
 

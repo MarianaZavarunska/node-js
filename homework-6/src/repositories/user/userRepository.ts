@@ -11,6 +11,14 @@ class UserRepository extends Repository<User> implements IUserRepository {
         return getManager().getRepository(User).find({ relations: ['posts', 'comments'] });
     }
 
+    public async getUserByEmail(email: string): Promise<IUser | undefined> {
+        return getManager().getRepository(User)
+            .createQueryBuilder('user')
+            .where('user.email = :email', { email })
+            .andWhere('user.deletedAt IS NULL')
+            .getOne();
+    }
+
     public async createUser(user:IUser): Promise<IUser> {
         return getManager().getRepository(User).save(user);
     }
