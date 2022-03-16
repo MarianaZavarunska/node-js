@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 import { config } from '../config/config';
 import { IToken } from '../entity/token';
@@ -29,16 +29,16 @@ class TokenService {
     }
 
     public async deleteTokenPair(userId: number) {
-        return tokenRepository.delete({ userId });
+        return tokenRepository.deleteTokenByParams({ userId });
     }
 
-    public async verifyToken(authToken: string, tokenType = 'access'): Promise<string | JwtPayload> {
+    public async verifyToken(authToken: string, tokenType = 'access'): Promise<IUserPayload> {
         let secretWord = config.SECRET_ACCESS__KEY;
 
         if (tokenType === 'refresh') {
             secretWord = config.SECRET_REFRESH__KEY;
         }
-        return jwt.verify(authToken, secretWord as string); // resh
+        return jwt.verify(authToken, secretWord as string) as IUserPayload; // resh
     }
 }
 

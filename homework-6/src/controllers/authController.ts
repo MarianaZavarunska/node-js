@@ -4,6 +4,8 @@ import { authService } from '../services/authService';
 import { ITokenData } from '../interfaces/token.interface';
 import { COOKIE } from '../constans/cookie';
 import { tokenService } from '../services/tokenService';
+import { IRequestExtended } from '../interfaces/request.interface';
+import { IUser } from '../entity/user';
 
 class AuthController {
     public async registration(req:Request, res:Response): Promise<Response<ITokenData>> {
@@ -18,9 +20,11 @@ class AuthController {
         return res.json(data);
     }
 
-    public async logout(req: Request, res: Response): Promise<Response<string>> {
+    public async logout(req: IRequestExtended, res: Response): Promise<Response<string>> {
+        const { id } = req.user as IUser;
+
         res.clearCookie(COOKIE.nameRefreshToken);
-        await tokenService.deleteTokenPair(3);
+        await tokenService.deleteTokenPair(id);
 
         return res.json('ok');
     }
