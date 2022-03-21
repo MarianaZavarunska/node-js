@@ -35,6 +35,14 @@ class UserService {
         return deletedUser;
     }
 
+    public async compareUserPasswords(password:string, hash:string): Promise<void | Error> {
+        const isPasswordUnique = await bcrypt.compare(password, hash);
+
+        if (!isPasswordUnique) {
+            throw new Error('User does not exist');
+        }
+    }
+
     private async _hashPassword(password:string): Promise<string> {
         return bcrypt.hash(password, 10);
     }

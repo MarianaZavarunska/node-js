@@ -6,6 +6,8 @@ import { COOKIE } from '../constans/cookie';
 import { tokenService } from '../services/tokenService';
 import { IRequestExtended } from '../interfaces/request.interface';
 import { IUser } from '../entity/user';
+import { tokenRepository } from '../repositories/token/tokenRepository';
+import { userService } from '../services/userService';
 
 class AuthController {
     public async registration(req:Request, res:Response): Promise<Response<ITokenData>> {
@@ -18,6 +20,29 @@ class AuthController {
             // in order to via cookies write some js code
         );
         return res.json(data);
+    }
+
+    async login(req: IRequestExtended, res: Response) {
+        try {
+            const { id, email, password: hashedPassword } = req.user as IUser;
+            const { password } = req.body;
+
+            const { refreshToken, accessToken } = await tokenService.generateTokenPairs({
+                userId: id, userEmail: email,
+            });
+
+            await userService.compareUserPasswords(password, hashedPassword);
+
+            await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
+
+              res.json({
+                refreshToken,
+                accessToken,
+                user: req.user,
+            });
+        } catch (e) {
+            res.status(404).json(e);
+        }
     }
 
     public async logout(req: IRequestExtended, res: Response): Promise<Response<string>> {
