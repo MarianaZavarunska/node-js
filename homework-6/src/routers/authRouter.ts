@@ -6,8 +6,8 @@ import { userMiddleware } from '../middlewares/usersMiddleware';
 
 const router = Router();
 
-router.post('/registration', authController.registration);
-router.post('/login', userMiddleware.checkIfUserExists, authController.login);
+router.post('/registration', userMiddleware.validateCreateUser, authController.registration);
+router.post('/login', userMiddleware.validateLoginUser, userMiddleware.checkIfUserExists, authController.login);
 router.post('/logout', authMiddleware.checkAccessToken, authController.logout);
 router.post('/refresh', authMiddleware.checkRefreshToken, authController.refreshToken); // refresh token
 

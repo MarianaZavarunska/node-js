@@ -16,10 +16,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/bcrypt": "^5.0.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",
@@ -27,7 +27,9 @@
     "undefined": "^0.1.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
+    "@types/joi": "^17.2.3",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^17.0.19",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
