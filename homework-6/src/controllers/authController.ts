@@ -27,7 +27,7 @@ class AuthController {
             const { id, email, password: hashedPassword } = req.user as IUser;
             const { password } = req.body;
 
-            const { refreshToken, accessToken } = await tokenService.generateTokenPairs({
+            const { refreshToken, accessToken } = await tokenService.generateTokenPair({
                 userId: id, userEmail: email,
             });
 
@@ -35,7 +35,7 @@ class AuthController {
 
             await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
 
-              res.json({
+            res.json({
                 refreshToken,
                 accessToken,
                 user: req.user,
@@ -52,6 +52,32 @@ class AuthController {
         await tokenService.deleteTokenPair(id);
 
         return res.json('ok');
+    }
+
+    public async refreshToken(req: IRequestExtended, res: Response) {
+        try {
+            const { id, email } = req.user as IUser;
+            const currentRefreshToken = req.get('Authorization');
+
+            await tokenService.deleteTokenPairByParams({ refreshToken: currentRefreshToken });
+
+            const { accessToken, refreshToken } = await tokenService.generateTokenPair(
+                {
+                    userId: id,
+                    userEmail: email,
+                },
+            );
+
+            await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
+
+            res.json({
+                refreshToken,
+                accessToken,
+                user: req.user,
+            });
+        } catch (e) {
+            res.status(404).json(e);
+        }
     }
 }
 

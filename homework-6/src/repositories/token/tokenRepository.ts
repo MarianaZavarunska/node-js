@@ -10,8 +10,8 @@ class TokenRepository extends Repository<Token> implements ITokenRepository {
         return getManager().getRepository(Token).save(token);
     }
 
-    public async findTokenUserByUserId(userId: number): Promise<IToken | undefined> {
-        return getManager().getRepository(Token).findOne({ userId });
+    public async findTokenUserByParams(searchObject: Partial<IToken>): Promise<IToken | undefined> {
+        return getManager().getRepository(Token).findOne(searchObject);
     }
 
     public async deleteTokenByParams(findObject: Partial<IToken>) {

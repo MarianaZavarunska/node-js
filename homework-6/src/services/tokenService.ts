@@ -6,7 +6,7 @@ import { ITokenPair, IUserPayload } from '../interfaces/token.interface';
 import { tokenRepository } from '../repositories/token/tokenRepository';
 
 class TokenService {
-    public generateTokenPairs(payload: IUserPayload):
+    public generateTokenPair(payload: IUserPayload):
       ITokenPair {
         const accessToken = jwt.sign(payload, config.SECRET_ACCESS__KEY as string, { expiresIn: '1d' });
         const refreshToken = jwt.sign(payload, config.SECRET_REFRESH__KEY as string, { expiresIn: '1d' });
@@ -19,7 +19,7 @@ class TokenService {
 
     public async saveToken(userId: number, accessToken:
         string, refreshToken: string): Promise<IToken> {
-        const tokenFromDb = await tokenRepository.findTokenUserByUserId(userId);
+        const tokenFromDb = await tokenRepository.findTokenUserByParams({ userId });
 
         if (tokenFromDb) {
             tokenFromDb.refreshToken = refreshToken;
@@ -32,6 +32,10 @@ class TokenService {
 
     public async deleteTokenPair(userId: number) {
         return tokenRepository.deleteTokenByParams({ userId });
+    }
+
+    public async deleteTokenPairByParams(searchObject: Partial<IToken>) {
+        return tokenRepository.deleteTokenByParams(searchObject);
     }
 
     public async verifyToken(authToken: string, tokenType = 'access'): Promise<IUserPayload> {

@@ -9,6 +9,6 @@ const router = Router();
 router.post('/registration', authController.registration);
 router.post('/login', userMiddleware.checkIfUserExists, authController.login);
 router.post('/logout', authMiddleware.checkAccessToken, authController.logout);
-// router.post('refresh', authController.registration); // refresh token
+router.post('refresh', authMiddleware.checkRefreshToken, authController.refreshToken); // refresh token
 
 export const authRouter = router;

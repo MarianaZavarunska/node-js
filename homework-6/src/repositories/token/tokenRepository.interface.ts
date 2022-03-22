@@ -4,5 +4,5 @@ import { ITokenDataToSave } from '../../interfaces/token.interface';
 
 export interface ITokenRepository {
     createToken(token: ITokenDataToSave): Promise<IToken>;
-    findTokenUserByUserId(userId: number): Promise<IToken | undefined>;
+    findTokenUserByParams(searchObject: Partial<IToken>): Promise<IToken | undefined>;
 }
