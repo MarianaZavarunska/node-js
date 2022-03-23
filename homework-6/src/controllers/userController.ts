@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 
 import { IUser } from '../entity/user';
 import { userService } from '../services/userService';
+import {IRequestExtended, ITokenData } from '../interfaces';
+import { COOKIE } from '../constans/cookie';
 
 class UserController {
     public async getAllUsers(req:Request, res:Response): Promise<Response<IUser[]>> {
@@ -15,13 +17,20 @@ class UserController {
         return res.json(user);
     }
 
-    public async createUser(req: Request, res: Response): Promise<Response<IUser>> {
-        const newUser = await userService.createUser(req.body);
-        return res.json(newUser);
+    public async createUser(req: Request, res: Response): Promise<Response<ITokenData>> {
+        const data = await userService.registerUser(req.body);
+        // write in cookies
+        res.cookie(
+            'refreshToken',
+            COOKIE.nameRefreshToken,
+            { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
+            // in order to via cookies write some js code
+        );
+        return res.json(data);
     }
 
-    public async updateById(req:Request, res: Response): Promise<Response<IUser>> {
-        const { password, email } = req.body;
+    public async updateById(req:IRequestExtended, res: Response): Promise<Response<IUser>> {
+        const { password, email } = req.updateUser as Partial<IUser>;
         const { id } = req.params;
         const updatedUserProp = { id: Number(id), password, email };
 

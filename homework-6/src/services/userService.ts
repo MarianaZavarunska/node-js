@@ -1,8 +1,9 @@
 import bcrypt from 'bcrypt';
 import { UpdateResult } from 'typeorm';
 
-import { IUser, User } from '../entity/user';
+import { IUser } from '../entity/user';
 import { userRepository } from '../repositories/user/userRepository';
+import { tokenService } from './tokenService';
 
 class UserService {
     public async getAllUsers(): Promise<IUser[]> {
@@ -25,8 +26,23 @@ class UserService {
         return newUser;
     }
 
-    public async updateById(updatedUserProp:Partial<User>): Promise<UpdateResult> {
-        const updatedUser = await userRepository.updatedById(updatedUserProp);
+    public async registerUser(body: IUser) {
+        const { email } = body;
+        const userFromDB = await this.getUserByEmail(email);
+        if (userFromDB) {
+            throw new Error(`User with:  ${email} email already exists`);
+        }
+        const createdUser = await this.createUser(body);
+        return this._getTokenData(createdUser);
+    }
+
+    public async updateById(updatedUserProp:Partial<IUser>): Promise<UpdateResult> {
+        const { password } = updatedUserProp;
+        const hashedPassword = await this._hashPassword(password as string);
+
+        const dataToSave = { ...updatedUserProp, password: hashedPassword };
+
+        const updatedUser = await userRepository.updatedById(dataToSave);
         return updatedUser;
     }
 
@@ -43,7 +59,20 @@ class UserService {
         }
     }
 
-    private async _hashPassword(password:string): Promise<string> {
+    private async _getTokenData(data:IUser) {
+        const { id, email } = data;
+        const tokenPair = await tokenService.generateTokenPair({ userId: id, userEmail: email });
+
+        await tokenService.saveToken(id, tokenPair.refreshToken, tokenPair.accessToken);
+
+        return {
+            ...tokenPair,
+            userId: id,
+            userEmail: email,
+        };
+    }
+
+    private async _hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, 10);
     }
 }

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import { commentService } from '../services/commentService';
 import { IComment } from '../entity/comments';
+import {IRequestExtended, IUpdateComment} from "../interfaces";
 
 class CommentController {
     // eslint-disable-next-line max-len
@@ -12,10 +13,10 @@ class CommentController {
         return res.json(commentsAndPosts);
     }
 
-    public async updateComment(req:Request, res:Response): Promise<Response<IComment>> {
-        const { commentId, action } = req.body;
+    public async updateComment(req:IRequestExtended, res:Response): Promise<Response<IComment>> {
+        const { commentId, action } = req.comment as IUpdateComment;
 
-        const updatedComment = await commentService.updateComment(+commentId, action);
+        const updatedComment = await commentService.updateComment(commentId, action);
         return res.json(updatedComment);
     }
 }

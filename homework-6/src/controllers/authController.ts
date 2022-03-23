@@ -1,7 +1,5 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
-import { authService } from '../services/authService';
-import { ITokenData } from '../interfaces/token.interface';
 import { COOKIE } from '../constans/cookie';
 import { tokenService } from '../services/tokenService';
 import { IRequestExtended } from '../interfaces/request.interface';
@@ -10,18 +8,6 @@ import { tokenRepository } from '../repositories/token/tokenRepository';
 import { userService } from '../services/userService';
 
 class AuthController {
-    public async registration(req:Request, res:Response): Promise<Response<ITokenData>> {
-        const data = await authService.registration(req.body);
-        // write in cookies
-        res.cookie(
-            'refreshToken',
-            COOKIE.nameRefreshToken,
-            { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
-            // in order to via cookies write some js code
-        );
-        return res.json(data);
-    }
-
     async login(req: IRequestExtended, res: Response) {
         try {
             const { id, email, password: hashedPassword } = req.user as IUser;

@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+
 import { regexp } from '../constans/regexp';
 
 export const userValidator = {
@@ -34,6 +35,17 @@ export const userValidator = {
             .required(),
     }),
     login: Joi.object({
+        email: Joi
+            .string()
+            .regex(regexp.EMAIL)
+            .trim()
+            .required(),
+        password: Joi
+            .string()
+            .regex(regexp.PASSWORD)
+            .required(),
+    }),
+    update: Joi.object({
         email: Joi
             .string()
             .regex(regexp.EMAIL)

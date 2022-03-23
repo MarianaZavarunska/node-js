@@ -6,9 +6,8 @@ import { ITokenPair, IUserPayload } from '../interfaces/token.interface';
 import { tokenRepository } from '../repositories/token/tokenRepository';
 
 class TokenService {
-    public generateTokenPair(payload: IUserPayload):
-      ITokenPair {
-        const accessToken = jwt.sign(payload, config.SECRET_ACCESS__KEY as string, { expiresIn: '1d' });
+    public generateTokenPair(payload: IUserPayload): ITokenPair {
+        const accessToken = jwt.sign(payload, config.SECRET_ACCESS__KEY as string, { expiresIn: '15min' });
         const refreshToken = jwt.sign(payload, config.SECRET_REFRESH__KEY as string, { expiresIn: '1d' });
 
         return {

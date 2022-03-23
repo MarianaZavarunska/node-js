@@ -46,6 +46,20 @@ class UserMiddleware {
             res.status(400).json(e.message);
         }
     }
+
+    async validateUpadateUser(req:IRequestExtended, res:Response, next: NextFunction) {
+        try {
+            const { error, value } = await userValidator.update.validate(req.body);
+
+            if (error) {
+                throw new Error(error.details[0].message);
+            }
+            req.user = value;
+            next();
+        } catch (e:any) {
+            res.status(400).json(e.message);
+        }
+    }
 }
 
 export const userMiddleware = new UserMiddleware();

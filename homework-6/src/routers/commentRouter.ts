@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { commentController } from '../controllers/commentController';
+import { commentMiddleware } from '../middlewares/commentMiddleware';
 
 const routes = Router();
 
 routes.get('/:userId', commentController.commentsAndPostsByUserId);
-routes.patch('/action', commentController.updateComment);
+routes.patch('/action', commentMiddleware.validateComment, commentController.updateComment);
 
 export const commentRouter = routes;
