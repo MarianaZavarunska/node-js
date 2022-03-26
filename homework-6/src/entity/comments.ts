@@ -5,6 +5,7 @@ import {
 import { CommonFields } from './commonFields';
 import { User } from './user';
 import { Post } from './post';
+import { config } from '../config/config';
 
 export interface IComment {
     text: string,
@@ -14,7 +15,7 @@ export interface IComment {
     dislikes: number,
 }
 
-@Entity('Comments', { database: 'Zavarunska' })
+@Entity('Comments', { database: config.MYSQL_DATABASE_NAME })
 
 export class Comment extends CommonFields implements IComment {
     @Column({

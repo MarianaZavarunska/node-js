@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { postController } from '../controllers/postController';
-import { postMiddleware } from '../middlewares/postMiddleware';
+import { postMiddleware } from '../middlewares';
 
 const routes = Router();
 

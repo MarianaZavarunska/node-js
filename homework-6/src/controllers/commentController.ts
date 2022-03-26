@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 import { commentService } from '../services/commentService';
 import { IComment } from '../entity/comments';
-import {IRequestExtended, IUpdateComment} from "../interfaces";
+import { IRequestExtended, IUpdateComment } from '../interfaces';
 
 class CommentController {
     // eslint-disable-next-line max-len

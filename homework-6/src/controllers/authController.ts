@@ -2,10 +2,12 @@ import { Response } from 'express';
 
 import { COOKIE } from '../constans/cookie';
 import { tokenService } from '../services/tokenService';
-import { IRequestExtended } from '../interfaces/request.interface';
+import { IRequestExtended } from '../interfaces';
 import { IUser } from '../entity/user';
 import { tokenRepository } from '../repositories/token/tokenRepository';
 import { userService } from '../services/userService';
+import { emailService } from '../email/email.service';
+import { emailTypeEnum } from '../email';
 
 class AuthController {
     async login(req: IRequestExtended, res: Response) {
@@ -20,7 +22,7 @@ class AuthController {
             await userService.compareUserPasswords(password, hashedPassword);
 
             await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
-
+            await emailService.sendEmail(email, emailTypeEnum.WELCOME);
             res.json({
                 refreshToken,
                 accessToken,
@@ -32,8 +34,9 @@ class AuthController {
     }
 
     public async logout(req: IRequestExtended, res: Response): Promise<Response<string>> {
-        const { id } = req.user as IUser;
+        const { id, email } = req.user as IUser;
 
+        await emailService.sendEmail(email, emailTypeEnum.FAREWALL);
         res.clearCookie(COOKIE.nameRefreshToken);
         await tokenService.deleteTokenPair(id);
 

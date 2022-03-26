@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 import { IUser } from '../entity/user';
 import { userService } from '../services/userService';
-import {IRequestExtended, ITokenData } from '../interfaces';
+import { IRequestExtended, ITokenData } from '../interfaces';
 import { COOKIE } from '../constans/cookie';
 
 class UserController {

@@ -4,6 +4,7 @@ import {
 
 import { CommonFields } from './commonFields';
 import { User } from './user';
+import { config } from '../config/config';
 
 export interface IToken {
     refreshToken: string,
@@ -11,7 +12,7 @@ export interface IToken {
     userId: number,
 }
 
-@Entity('Tokens', { database: 'Zavarunska' })
+@Entity('Tokens', { database: config.MYSQL_DATABASE_NAME })
 export class Token extends CommonFields implements IToken {
     @Column({
         type: 'varchar',

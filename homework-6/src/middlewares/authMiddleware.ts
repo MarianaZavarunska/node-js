@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+import { ErrorHandler } from '../error/error.handler';
 import { IRequestExtended } from '../interfaces/request.interface';
 import { tokenRepository } from '../repositories/token/tokenRepository';
 import { tokenService } from '../services/tokenService';
@@ -10,7 +11,8 @@ class AuthMiddleware {
             const accessToken = req.get('Authorization');
 
             if (!accessToken) {
-                throw new Error('No token');
+                next(new ErrorHandler('No token'));
+                return;
             }
 
             const { userEmail } = await tokenService.verifyToken(accessToken);
@@ -18,17 +20,15 @@ class AuthMiddleware {
             const userFromToken = await userService.getUserByEmail(userEmail);
 
             if (!userFromToken) {
-                throw new Error('Wrong Token');
+                next(new ErrorHandler('Token is not valid', 401));
+                return;
             }
 
             req.user = userFromToken;
 
             next();
-        } catch (e: any) {
-            res.json({
-                status: 400,
-                message: e.message,
-            });
+        } catch (e) {
+            next(e);
         }
     }
 
@@ -37,7 +37,8 @@ class AuthMiddleware {
             const refreshToken = req.get('Authorization');
 
             if (!refreshToken) {
-                throw new Error('No token');
+                next(new ErrorHandler('No token'));
+                return;
             }
 
             const { userEmail } = await tokenService.verifyToken(refreshToken, 'refresh');
@@ -45,23 +46,22 @@ class AuthMiddleware {
             const tokenPairFromDB = await tokenRepository.findTokenUserByParams({ refreshToken });
 
             if (!tokenPairFromDB) {
-                throw new Error('Wrong Token');
+                next(new ErrorHandler('Token is not valid', 401));
+                return;
             }
 
             const userFromToken = await userService.getUserByEmail(userEmail);
 
             if (!userFromToken) {
-                throw new Error('Wrong Token');
+                next(new ErrorHandler('Token is not valid', 401));
+                return;
             }
 
             req.user = userFromToken;
 
             next();
-        } catch (e: any) {
-            res.json({
-                status: 400,
-                message: e.message,
-            });
+        } catch (e) {
+            next(e);
         }
     }
 }

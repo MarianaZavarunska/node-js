@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { commentController } from '../controllers/commentController';
-import { commentMiddleware } from '../middlewares/commentMiddleware';
+import { commentMiddleware } from '../middlewares';
 
 const routes = Router();
 

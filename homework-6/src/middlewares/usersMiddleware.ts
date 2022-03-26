@@ -3,6 +3,7 @@ import { Response, NextFunction } from 'express';
 import { IRequestExtended } from '../interfaces';
 import { userRepository } from '../repositories/user/userRepository';
 import { userValidator } from '../validators/user.validators';
+import { ErrorHandler } from '../error/error.handler';
 
 class UserMiddleware {
     async checkIfUserExists(req:IRequestExtended, res:Response, next: NextFunction) {
@@ -10,26 +11,30 @@ class UserMiddleware {
             const userFromDB = await userRepository.getUserByEmail(req.body.email);
 
             if (!userFromDB) {
-                throw new Error('wrong email or password');
+                next(new ErrorHandler('wrong email or password', 401));
+                return;
             }
             req.user = userFromDB;
             next();
-        } catch (e:any) {
-            res.status(400).json(e.message);
+        } catch (e) {
+            next(e);
         }
     }
+
+    // Validators
 
     async validateCreateUser(req:IRequestExtended, res:Response, next: NextFunction) {
         try {
             const { error, value } = await userValidator.createUser.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                next(new ErrorHandler(error.details[0].message));
+                return;
             }
             req.user = value;
             next();
-        } catch (e:any) {
-            res.status(400).json(e.message);
+        } catch (e) {
+            next(e);
         }
     }
 
@@ -38,12 +43,13 @@ class UserMiddleware {
             const { error, value } = await userValidator.login.validate(req.body);
 
             if (error) {
-                throw new Error('Email or password is wrong');
+                next(new ErrorHandler('Email or password is wrong', 401));
+                return;
             }
             req.user = value;
             next();
-        } catch (e:any) {
-            res.status(400).json(e.message);
+        } catch (e) {
+            next(e);
         }
     }
 
@@ -52,12 +58,13 @@ class UserMiddleware {
             const { error, value } = await userValidator.update.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                next(new ErrorHandler(error.details[0].message));
+                return;
             }
             req.user = value;
             next();
-        } catch (e:any) {
-            res.status(400).json(e.message);
+        } catch (e) {
+            next(e);
         }
     }
 }
