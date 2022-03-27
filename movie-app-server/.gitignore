@@ -1,0 +1,7 @@
+/dist
+/node_modules
+.idea
+ormconfig.json
+package-lock.json
+
+.DS_Store
