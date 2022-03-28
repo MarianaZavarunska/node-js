@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { IToken, ITokenPair, IUserPayload } from '../interfaces/token.interface';
+import { IToken, ITokenPair, IUserPayload } from '../interfaces';
 import { config } from '../config/config';
 import { tokenRepository } from '../repositories/token/token.repository';
 
@@ -38,7 +38,17 @@ class TokenService {
     }
 
     public async deleteTokenPairByParams(searchObject: Partial<IToken>) {
-        return tokenRepository.deleteTokenByParams(searchObject)
+        return tokenRepository.deleteTokenByParams(searchObject);
+    }
+
+    public async verifyToken(authToken: string, tokenType = 'access'): Promise<IUserPayload> {
+        let secretWord = config.SECRET_ACCESS__KEY;
+
+        if (tokenType === 'refresh') {
+            secretWord = config.SECRET_REFRESH__KEY;
+        }
+
+        return jwt.verify(authToken, secretWord as string) as IUserPayload;
     }
 }
 
