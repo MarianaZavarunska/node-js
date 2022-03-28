@@ -36,6 +36,10 @@ class TokenService {
 
         return tokenRepository.createToken(dataToSave);
     }
+
+    public async deleteTokenPairByParams(searchObject: Partial<IToken>) {
+        return tokenRepository.deleteTokenByParams(searchObject)
+    }
 }
 
 export const tokenService = new TokenService();

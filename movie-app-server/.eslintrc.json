@@ -43,7 +43,8 @@
             {
                 "allowLiteral": false
             }
-        ]
+        ],
+        "max-len": ["error", {"code": 140}]
     },
     "settings": {
         "import/resolver": {

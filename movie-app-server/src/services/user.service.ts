@@ -19,6 +19,14 @@ class UserService {
         return newUser;
     }
 
+    public async compareUserPasswords(password:string, hashedPassword:string): Promise<void | Error> {
+        const isPasswordUnique = await bcrypt.compare(password, hashedPassword);
+
+        if (isPasswordUnique) {
+            throw new Error('Password or email is wrong');
+        }
+    }
+
     private async _hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, 10);
     }
