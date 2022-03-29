@@ -27,7 +27,6 @@
         ],
 //        "class-methods-use-this": ["error", { "exceptMethods": ["up", "down"] }],
         "class-methods-use-this": "off",
-        "no-unused-vars": ["error", {"args":  "none"}],
         "no-underscore-dangle": "off",
 
         "sql/format": [
@@ -44,7 +43,12 @@
                 "allowLiteral": false
             }
         ],
-        "max-len": ["error", {"code": 140}]
+        "max-len": ["error", {"code": 140}],
+
+        "no-unused-vars": "off",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": ["error"],
+        "default-param-last": 0
     },
     "settings": {
         "import/resolver": {

@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 
 import { authService, tokenService, userService } from '../services';
 import { COOKIE } from '../constants/cookie';
-import { IRequestExtended, IUserEntity, ITokenData } from '../interfaces';
+import { IRequestExtended, ITokenData, IUserEntity } from '../interfaces';
 import { tokenRepository } from '../repositories/token/token.repository';
+import { emailService } from '../email/email.service';
+import { EmailTypeEnum } from '../email';
 
 class AuthController {
     public async registration(req:Request, res:Response): Promise<Response<ITokenData>> {
@@ -19,7 +21,10 @@ class AuthController {
 
     public async login(req: IRequestExtended, res: Response): Promise<void | Error> {
         try {
-            const { id, email, password: hashedPassword } = req.user as IUserEntity;
+            const {
+                id, firstName, email, password: hashedPassword,
+            } = req.user as IUserEntity;
+
             const { password } = req.body;
 
             const { accessToken, refreshToken } = await tokenService.generateTokenPair({ userId: id, userEmail: email });
@@ -27,6 +32,8 @@ class AuthController {
             await userService.compareUserPasswords(password, hashedPassword);
 
             await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
+
+            await emailService.sendEmail(email, firstName, EmailTypeEnum.WELCOME);
 
             res.json({
                 accessToken,

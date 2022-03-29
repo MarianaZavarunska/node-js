@@ -1,5 +1,4 @@
-export enum emailTypeEnum {
-    WELCOME,
-    FAREWALL
+export enum EmailTypeEnum {
+  WELCOME,
+  FAREWALL,
 }
- 

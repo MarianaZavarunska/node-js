@@ -9,4 +9,7 @@ export const config = {
     SECRET_REFRESH__KEY: process.env.SECRET_REFRESH__KEY,
     ACCESS_EXPIRE_TIME: process.env.ACCESS_EXPIRE_TIME,
     REFRESH_EXPIRE_TIME: process.env.REFRESH_EXPIRE_TIME,
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+    ADMIN_EMAIL_PASSWORD: process.env.ADMIN_EMAIL_PASSWORD,
+
 };

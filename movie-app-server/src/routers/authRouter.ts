@@ -7,8 +7,8 @@ import { authValidationMiddleware } from '../middlewares/vaildation/auth.validat
 const router = Router();
 
 router.post('/registration', authValidationMiddleware.validateRegisterUser, authController.registration);
-router.post('/login', userMiddleware.checkIfUserExists, authController.login);
+router.post('/login', authValidationMiddleware.validateLoginUser, userMiddleware.checkIfUserExists, authController.login);
 router.post('/logout', authMiddleware.checkAccessToken, authController.logout);
-router.post('/refresh', authController.refreshToken);
+router.post('/refresh', authMiddleware.checkRefreshToken, authController.refreshToken);
 
 export const authRouter = router;

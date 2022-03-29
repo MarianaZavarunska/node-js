@@ -1,58 +1,56 @@
 {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2021": true
-    },
-    "extends": [
-        "airbnb-base"
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": ["airbnb-base"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "plugins": ["@typescript-eslint", "sql"],
+  "rules": {
+    "indent": ["error", 4],
+    "import/prefer-default-export": "off",
+    "import/extensions": [
+      "error",
+      {
+        "js": "never",
+        "ts": "never"
+      }
     ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": "latest"
-    },
-    "plugins": [
-        "@typescript-eslint",
-        "sql"
+    //        "class-methods-use-this": ["error", { "exceptMethods": ["up", "down"] }],
+    "class-methods-use-this": "off",
+
+    "no-underscore-dangle": "off",
+
+    "sql/format": [
+      2,
+      {
+        "ignoreExpressions": false,
+        "ignoreInline": true,
+        "ignoreTagless": true
+      }
     ],
-    "rules": {
-        "indent": ["error", 4],
-        "import/prefer-default-export": "off",
-        "import/extensions": [
-            "error",
-            {
-                "js": "never",
-                "ts": "never"
-            }
-        ],
-//        "class-methods-use-this": ["error", { "exceptMethods": ["up", "down"] }],
-        "class-methods-use-this": "off",
-        "no-unused-vars": ["error", {"args":  "none"}],
-        "no-underscore-dangle": "off",
+    "sql/no-unsafe-query": [
+      2,
+      {
+        "allowLiteral": false
+      }
+    ],
 
-        "sql/format": [
-            2,
-            {
-                "ignoreExpressions": false,
-                "ignoreInline": true,
-                "ignoreTagless": true
-            }
-        ],
-        "sql/no-unsafe-query": [
-            2,
-            {
-                "allowLiteral": false
-            }
-        ]
-    },
+    "no-unused-vars": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "default-param-last": 0
+  },
 
-    "settings": {
-        "import/resolver": {
-            "node": {
-                "extensions": [".js", ".ts"]
-            }
-        }
-
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
     }
-
+  }
 }

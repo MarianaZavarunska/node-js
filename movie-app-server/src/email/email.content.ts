@@ -2,11 +2,11 @@ import { EmailTypeEnum } from './enums';
 
 export const emailContent = {
     [EmailTypeEnum.WELCOME]: {
-        subject: 'Welcome to acount!',
-        html: 'Welcome to acount!',
+        subject: 'Welcome to account!',
+        company: 'Movie App',
     },
     [EmailTypeEnum.FAREWALL]: {
         subject: 'FAREWALL!',
-        html: 'See you in a bit!',
+        company: 'Movie App',
     },
 };

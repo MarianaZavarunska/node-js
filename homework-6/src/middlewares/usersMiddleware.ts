@@ -6,7 +6,11 @@ import { userValidator } from '../validators/user.validators';
 import { ErrorHandler } from '../error/error.handler';
 
 class UserMiddleware {
-    async checkIfUserExists(req:IRequestExtended, res:Response, next: NextFunction) {
+    async checkIfUserExists(
+        req: IRequestExtended,
+        res: Response,
+        next: NextFunction,
+    ) {
         try {
             const userFromDB = await userRepository.getUserByEmail(req.body.email);
 
@@ -14,7 +18,6 @@ class UserMiddleware {
                 next(new ErrorHandler('wrong email or password', 401));
                 return;
             }
-            req.user = userFromDB;
             next();
         } catch (e) {
             next(e);
@@ -23,9 +26,15 @@ class UserMiddleware {
 
     // Validators
 
-    async validateCreateUser(req:IRequestExtended, res:Response, next: NextFunction) {
+    async validateCreateUser(
+        req: IRequestExtended,
+        res: Response,
+        next: NextFunction,
+    ) {
         try {
-            const { error, value } = await userValidator.createUser.validate(req.body);
+            const { error, value } = await userValidator.createUser.validate(
+                req.body,
+            );
 
             if (error) {
                 next(new ErrorHandler(error.details[0].message));
@@ -38,7 +47,11 @@ class UserMiddleware {
         }
     }
 
-    async validateLoginUser(req:IRequestExtended, res:Response, next: NextFunction) {
+    async validateLoginUser(
+        req: IRequestExtended,
+        res: Response,
+        next: NextFunction,
+    ) {
         try {
             const { error, value } = await userValidator.login.validate(req.body);
 
@@ -53,7 +66,11 @@ class UserMiddleware {
         }
     }
 
-    async validateUpadateUser(req:IRequestExtended, res:Response, next: NextFunction) {
+    async validateUpadateUser(
+        req: IRequestExtended,
+        res: Response,
+        next: NextFunction,
+    ) {
         try {
             const { error, value } = await userValidator.update.validate(req.body);
 

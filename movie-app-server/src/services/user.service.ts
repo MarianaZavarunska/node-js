@@ -22,7 +22,7 @@ class UserService {
     public async compareUserPasswords(password:string, hashedPassword:string): Promise<void | Error> {
         const isPasswordUnique = await bcrypt.compare(password, hashedPassword);
 
-        if (isPasswordUnique) {
+        if (!isPasswordUnique) {
             throw new Error('Password or email is wrong');
         }
     }
