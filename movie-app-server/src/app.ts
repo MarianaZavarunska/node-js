@@ -1,11 +1,18 @@
 import 'reflect-metadata';
 import express from 'express';
 import { createConnection } from 'typeorm';
+import cors from 'cors';
 
 import { config } from './config/config';
 import { apiRouter } from './routers/apiRouter';
 
 const app = express();
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200, // For legacy browser support
+    methods: 'GET, PUT, POST',
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
