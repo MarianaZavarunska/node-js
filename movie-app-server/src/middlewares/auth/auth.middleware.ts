@@ -38,7 +38,7 @@ class AuthMiddleware {
                 next(new ErrorHandler('No token'));
                 return;
             }
-            const { userEmail } = await tokenService.verifyToken(refreshToken);
+            const { userEmail } = await tokenService.verifyToken(refreshToken, 'refresh');
 
             const tokenPairFromDB = await tokenRepository.findTokenByParams({ refreshToken });
 

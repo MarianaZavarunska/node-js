@@ -4,7 +4,7 @@ import {
 
 import { config } from '../config/config';
 import { CommonFields } from './commonFields';
-import { IToken } from '../interfaces/token.interface';
+import { IToken } from '../interfaces';
 import { User } from './user';
 
 @Entity('Tokens', { database: config.DB_NAME })
