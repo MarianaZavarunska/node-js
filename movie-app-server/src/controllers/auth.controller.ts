@@ -10,12 +10,14 @@ import { EmailTypeEnum } from '../email';
 class AuthController {
     public async registration(req:Request, res:Response): Promise<Response<ITokenData>> {
         const data = await authService.registration(req.body);
+        const { firstName, email } = req.body;
 
         res.cookie(
             COOKIE.nameRefreshToken,
             data.refreshToken,
             { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
         );
+        await emailService.sendEmail(email, firstName, EmailTypeEnum.WELCOME);
         return res.json(data);
     }
 
@@ -46,10 +48,12 @@ class AuthController {
     }
 
     public async logout(req:IRequestExtended, res: Response): Promise<Response<string>> {
-        const { id } = req.user as IUserEntity;
+        const { id, firstName, email } = req.user as IUserEntity;
 
         res.clearCookie(COOKIE.nameRefreshToken);
         await tokenRepository.deleteTokenByParams({ userId: id });
+
+        await emailService.sendEmail(email, firstName, EmailTypeEnum.FAREWALL);
 
         return res.json('ok');
     }
