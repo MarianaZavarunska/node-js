@@ -12,7 +12,7 @@ class EmailService {
     public async sendEmail(userEmail:string, userName:string, type: EmailTypeEnum): Promise<SentMessageInfo> {
         const { subject, message, link } = emailContent[type];
 
-        const emailTemplateSource = fs.readFileSync(path.join('/Users/marianazavarynska/Desktop/OKTEN/node-js/movie-app-server/src', 'email-templates', '/email.hbs'), 'utf8');
+        const emailTemplateSource = fs.readFileSync(path.join(__dirname, '../', 'email-templates', '/email.hbs'), 'utf8');
 
         // use a template file with nodemailer
         const template = await handlebars.compile(emailTemplateSource);
