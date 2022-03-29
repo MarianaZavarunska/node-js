@@ -10,7 +10,7 @@ import { emailContent } from './email.content';
 
 class EmailService {
     public sendEmail(userEmail:string, userName:string, type: EmailTypeEnum) {
-        const { subject, company } = emailContent[type];
+        const { subject, message } = emailContent[type];
 
         const emailTemplateSource = fs.readFileSync(path.join(__dirname, '/email.hbs'), 'utf8');
 
@@ -36,7 +36,7 @@ class EmailService {
         // use a template file with nodemailer
         const template = handlebars.compile(emailTemplateSource);
         // emailTransporter.use('compile', hbs(templateFolder));
-        const htmlToSend = template({ message: `My test message ${userName}`, company, name: userName });
+        const htmlToSend = template({ message, name: userName });
 
         return emailTransporter.sendMail({
             to: userEmail,
