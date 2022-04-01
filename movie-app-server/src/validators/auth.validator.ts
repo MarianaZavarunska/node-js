@@ -45,4 +45,19 @@ export const authValidator = {
             .regex(regexp.PASSWORD)
             .required(),
     }),
+
+    email: Joi.object({
+        email: Joi
+            .string()
+            .regex(regexp.EMAIL)
+            .trim()
+            .required(),
+    }),
+
+    password: Joi.object({
+        password: Joi
+            .string()
+            .regex(regexp.PASSWORD)
+            .required(),
+    }),
 };

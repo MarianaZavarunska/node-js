@@ -23,6 +23,14 @@ class TokenService {
         };
     }
 
+    public generateActionToken(payload: IUserPayload): string {
+        return jwt.sign(
+            payload,
+            config.SECRET_ACTION__KEY,
+            { expiresIn: config.ACTION_EXPIRE_TIME },
+        );
+    }
+
     public async saveTokens(dataToSave: IToken): Promise<IToken> {
         const { userId, accessToken, refreshToken } = dataToSave;
 
@@ -46,6 +54,9 @@ class TokenService {
 
         if (tokenType === 'refresh') {
             secretWord = config.SECRET_REFRESH__KEY;
+        }
+        if (tokenType === 'action') {
+            secretWord = config.SECRET_ACTION__KEY;
         }
 
         return jwt.verify(authToken, secretWord as string) as IUserPayload;

@@ -12,6 +12,7 @@ app.use(cors({
     origin: 'http://localhost:3000',
     optionsSuccessStatus: 200, // For legacy browser support
     methods: 'GET, PUT, POST',
+    credentials: true,
 }));
 
 app.use(express.json());

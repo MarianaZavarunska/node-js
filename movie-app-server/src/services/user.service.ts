@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 
+import { UpdateResult } from 'typeorm';
 import { IUserEntity } from '../interfaces';
 import { userRepository } from '../repositories/user/user.repository';
 
@@ -17,6 +18,15 @@ class UserService {
 
         const newUser = await userRepository.creteUser(data);
         return newUser;
+    }
+
+    public async updateUser(userId: number, user: Partial<IUserEntity>): Promise<UpdateResult> {
+        if (user.password) {
+            // eslint-disable-next-line no-param-reassign
+            user.password = await this._hashPassword(user.password);
+        }
+
+        return userRepository.updateUser({ id: userId, password: user.password });
     }
 
     public async compareUserPasswords(password:string, hashedPassword:string): Promise<void | Error> {

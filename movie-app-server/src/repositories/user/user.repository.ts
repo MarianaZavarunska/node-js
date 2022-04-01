@@ -1,4 +1,6 @@
-import { EntityRepository, getManager, Repository } from 'typeorm';
+import {
+    EntityRepository, getManager, Repository, UpdateResult,
+} from 'typeorm';
 
 import { User } from '../../entities/user';
 import { IUserEntity } from '../../interfaces';
@@ -15,6 +17,10 @@ class UserRepository extends Repository<User> implements IUserRepository {
 
     public async creteUser(user: IUserEntity): Promise<IUserEntity> {
         return getManager().getRepository(User).save(user);
+    }
+
+    public async updateUser(user: Partial<IUserEntity>): Promise<UpdateResult> {
+        return getManager().getRepository(User).update({ id: user.id }, { password: user.password });
     }
 }
 

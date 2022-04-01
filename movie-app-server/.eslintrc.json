@@ -43,7 +43,7 @@
                 "allowLiteral": false
             }
         ],
-        "max-len": ["error", {"code": 140}],
+        "max-len": ["error", {"code": 142}],
 
         "no-unused-vars": "off",
         "no-shadow": "off",

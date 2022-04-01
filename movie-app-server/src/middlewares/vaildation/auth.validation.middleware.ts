@@ -12,7 +12,7 @@ class AuthValidationMiddleware {
                 next(new ErrorHandler(error.details[0].message));
                 return;
             }
-            req.user = value;
+            req.body = value;
             next();
         } catch (e) {
             next(e);
@@ -26,7 +26,35 @@ class AuthValidationMiddleware {
                 next(new ErrorHandler(error.details[0].message));
                 return;
             }
-            req.user = value;
+            req.body = value;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async checkValidEmail(req: IRequestExtended, res: Response, next:NextFunction) {
+        try {
+            const { error, value } = await authValidator.email.validate(req.body);
+            if (error) {
+                next(new ErrorHandler(error.details[0].message));
+                return;
+            }
+            req.body = value;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async checkValidPassword(req: IRequestExtended, res: Response, next:NextFunction) {
+        try {
+            const { error, value } = await authValidator.password.validate(req.body);
+            if (error) {
+                next(new ErrorHandler(error.details[0].message));
+                return;
+            }
+            req.body = value;
             next();
         } catch (e) {
             next(e);
