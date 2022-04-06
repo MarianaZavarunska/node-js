@@ -20,7 +20,7 @@ class AuthController {
             data.refreshToken,
             { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
         );
-        await emailService.sendEmail(email, { firstName }, EmailTypeEnum.WELCOME);
+        await emailService.sendEmailGeneric(email, { firstName, template: 'email' }, EmailTypeEnum.WELCOME);
         return res.json(data);
     }
 
@@ -38,7 +38,7 @@ class AuthController {
 
             await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
 
-            await emailService.sendEmail(email, { firstName }, ActionTokenTypes.FORGOT_PASSWORD);
+            await emailService.sendEmailGeneric(email, { firstName, template: 'email' }, ActionTokenTypes.FORGOT_PASSWORD);
 
             res.json({
                 accessToken,
@@ -56,7 +56,7 @@ class AuthController {
         res.clearCookie(COOKIE.nameRefreshToken);
         await tokenRepository.deleteTokenByParams({ userId: id });
 
-        await emailService.sendEmail(email, { firstName }, EmailTypeEnum.FAREWALL);
+        await emailService.sendEmailGeneric(email, { firstName, template: 'email' }, EmailTypeEnum.FAREWALL);
 
         return res.json('ok');
     }
@@ -99,10 +99,9 @@ class AuthController {
                 userId: id,
             });
 
-            await emailService.sendRecoveryEmail(
+            await emailService.sendEmailGeneric(
                 email,
-                actionToken,
-                { firstName, frontUrl: constants.FRONTEND_URL },
+                { firstName, frontUrl: `${constants.FRONTEND_URL}?actionToken=${actionToken}`, template: 'forgotPassword' },
                 EmailTypeEnum.FORGOT_PASSWORD,
             );
 
@@ -122,9 +121,9 @@ class AuthController {
 
             await actionTokenRepository.deleteByParams({ actionToken });
 
-            await emailService.sendEmail(
+            await emailService.sendEmailGeneric(
                 email,
-                { firstName },
+                { firstName, template: 'email' },
                 EmailTypeEnum.RECOVER_PASSWORD,
             );
 

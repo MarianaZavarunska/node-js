@@ -8,9 +8,9 @@ export const getAllUsers = async () => {
         console.log('==== New Users ====');
         const users = await userRepository.getAllUsers();
 
-        const usersFromDB = users.map((user) => emailService.sendEmail(
+        const usersFromDB = users.map((user) => emailService.sendEmailGeneric(
             user.email,
-            { firstName: user.firstName },
+            { firstName: user.firstName, template: 'email' },
             EmailTypeEnum.WELCOME,
         ));
 
