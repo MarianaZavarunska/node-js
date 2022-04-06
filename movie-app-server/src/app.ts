@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import { config } from './config/config';
 import { apiRouter } from './routers/apiRouter';
+import { cronRun } from './cron/index';
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.listen(PORT, async () => {
     try {
         const connection = await createConnection();
         if (connection) console.log('Connection established!');
+        cronRun();
     } catch (e) {
         if (e) console.log(e);
     }

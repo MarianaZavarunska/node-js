@@ -22,6 +22,13 @@ class UserRepository extends Repository<User> implements IUserRepository {
     public async updateUser(user: Partial<IUserEntity>): Promise<UpdateResult> {
         return getManager().getRepository(User).update({ id: user.id }, { password: user.password });
     }
+
+    public async getAllUsers(): Promise<IUserEntity[]> {
+        return getManager().getRepository(User).createQueryBuilder('user')
+            .where('user.createdAt IS NOT NULL')
+            .andWhere('user.deletedAt IS NULL')
+            .getMany();
+    }
 }
 
 export const userRepository = new UserRepository();
