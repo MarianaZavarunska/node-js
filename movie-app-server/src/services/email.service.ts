@@ -1,13 +1,14 @@
 import nodemailer, { SentMessageInfo } from 'nodemailer';
 import * as path from 'path';
 import * as handlebars from 'handlebars';
-// import * as hbs from 'nodemailer-express-handlebars'
+import hbs from 'nodemailer-express-handlebars';
 import * as fs from 'fs';
 
 import { config } from '../config/config';
 import { ActionTokenTypes, EmailTypeEnum } from '../enums/enums';
 import { emailContent } from '../constants/email.content';
 import { IEmail } from '../interfaces';
+import { constants } from '../constants/constants';
 
 class EmailService {
     public async sendEmailGeneric(userEmail:string, obj: Partial<IEmail>, type: EmailTypeEnum | ActionTokenTypes): Promise<SentMessageInfo> {
@@ -38,6 +39,39 @@ class EmailService {
             subject,
             html: htmlToSend,
         });
+    }
+
+
+    public async sendEmailHBS(userEmail:string, userName:string, type: EmailTypeEnum, context:{} = {}):Promise<SentMessageInfo> {
+        Object.assign(context, { frontendUrl: constants.FRONTEND_URL });
+
+        const emailTransporter = nodemailer.createTransport({
+            from: 'No Reply Sep-2021',
+            service: 'gmail',
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: config.ADMIN_EMAIL,
+                pass: config.ADMIN_EMAIL_PASSWORD,
+            },
+        });
+
+        const handlebarsOptions = {
+            viewEngine: {
+                extname: 'hbs',
+                layoutsDir: path.resolve(__dirname, '../', 'email-templates', 'layouts'),
+                defaultLayout: 'layout',
+                partialsDir: path.resolve(__dirname, '../', 'email-templates', 'partials'),
+            },
+            viewPath: path.resolve(__dirname, '../', 'email-templates'),
+            extName: 'hbs',
+        };
+        emailTransporter.use('compile', hbs(handlebarsOptions));
+
+        const { subject } = emailContent[type];
+
+        // @ts-ignore
+        return emailTransporter.sendMail({ to: userEmail, subject, template: 'welcome.', context: { userName, frontendUrl: constants.FRONTEND_URL } });
     }
 }
 

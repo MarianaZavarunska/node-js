@@ -21,6 +21,7 @@ class AuthController {
             { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
         );
         await emailService.sendEmailGeneric(email, { firstName, template: 'email' }, EmailTypeEnum.WELCOME);
+
         return res.json(data);
     }
 
@@ -38,7 +39,9 @@ class AuthController {
 
             await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
 
-            await emailService.sendEmailGeneric(email, { firstName, template: 'email' }, ActionTokenTypes.FORGOT_PASSWORD);
+            // await emailService.sendEmailGeneric(email, { firstName, template: 'email' }, ActionTokenTypes.FORGOT_PASSWORD);
+            await emailService.sendEmailHBS(email, firstName, EmailTypeEnum.WELCOME);
+
 
             res.json({
                 accessToken,
