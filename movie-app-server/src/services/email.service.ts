@@ -43,7 +43,7 @@ class EmailService {
 
 
     public async sendEmailHBS(userEmail:string, userName:string, type: EmailTypeEnum, context:{} = {}):Promise<SentMessageInfo> {
-        Object.assign(context, { frontendUrl: constants.FRONTEND_URL });
+        Object.assign(context, { frontendUrl: constants.FRONTEND_URL, userName });
 
         const emailTransporter = nodemailer.createTransport({
             from: 'No Reply Sep-2021',
@@ -71,7 +71,7 @@ class EmailService {
         const { subject } = emailContent[type];
 
         // @ts-ignore
-        return emailTransporter.sendMail({ to: userEmail, subject, template: 'welcome.', context: { userName, frontendUrl: constants.FRONTEND_URL } });
+        return emailTransporter.sendMail({ to: userEmail, subject, template: 'welcome.', context });
     }
 }
 
