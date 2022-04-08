@@ -63,7 +63,7 @@ class EmailService {
                 partialsDir: path.resolve(__dirname, '../', 'email-templates', 'partials'),
             },
             viewPath: path.resolve(__dirname, '../', 'email-templates'),
-            extName: 'hbs',
+            extName: '.hbs',
         };
         emailTransporter.use('compile', hbs(handlebarsOptions));
 
@@ -71,7 +71,7 @@ class EmailService {
 
         return emailTransporter.sendMail({
             // @ts-ignore
-            to: userEmail, subject, template: 'welcome.', context,
+            to: userEmail, subject, template: 'welcome', context,
         });
     }
 }
