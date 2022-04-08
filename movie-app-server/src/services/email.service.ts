@@ -41,7 +41,6 @@ class EmailService {
         });
     }
 
-
     public async sendEmailHBS(userEmail:string, userName:string, type: EmailTypeEnum, context:{} = {}):Promise<SentMessageInfo> {
         Object.assign(context, { frontendUrl: constants.FRONTEND_URL, userName });
 
@@ -70,8 +69,10 @@ class EmailService {
 
         const { subject } = emailContent[type];
 
-        // @ts-ignore
-        return emailTransporter.sendMail({ to: userEmail, subject, template: 'welcome.', context });
+        return emailTransporter.sendMail({
+            // @ts-ignore
+            to: userEmail, subject, template: 'welcome.', context,
+        });
     }
 }
 

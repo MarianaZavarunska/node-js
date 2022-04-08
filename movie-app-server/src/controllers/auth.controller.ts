@@ -42,7 +42,6 @@ class AuthController {
             // await emailService.sendEmailGeneric(email, { firstName, template: 'email' }, ActionTokenTypes.FORGOT_PASSWORD);
             await emailService.sendEmailHBS(email, firstName, EmailTypeEnum.WELCOME);
 
-
             res.json({
                 accessToken,
                 refreshToken,
