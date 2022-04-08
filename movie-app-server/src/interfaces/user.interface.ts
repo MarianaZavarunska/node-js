@@ -8,3 +8,11 @@ export interface IUserEntity extends ICommonEntity{
     email: string,
     password: string,
 }
+
+export interface IPaginationResponse<T> {
+    page: number,
+    perPage: number,
+    totalItems: number,
+    data: T[],
+}
+// data: IUserEntity[],

@@ -3,7 +3,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../../entities/user';
-import { IUserEntity } from '../../interfaces';
+import { IPaginationResponse, IUserEntity } from '../../interfaces';
 import { IUserRepository } from './user.repository.interface';
 
 @EntityRepository(User)
@@ -28,6 +28,23 @@ class UserRepository extends Repository<User> implements IUserRepository {
             .where('user.createdAt IS NOT NULL')
             .andWhere('user.deletedAt IS NULL')
             .getMany();
+    }
+
+    // PAGINATION (for frontend )
+
+    public async getUserPagination(searchObject: Partial<IUserEntity> = {}, limit: number, page: number = 1)
+        : Promise<IPaginationResponse<IUserEntity>> {
+        const skip = limit * (page - 1);
+        const [users, totalItems] = await getManager().getRepository(User).findAndCount({ where: searchObject, skip, take: limit });
+
+        // console.log(users);
+
+        return {
+            page,
+            perPage: limit,
+            totalItems,
+            data: users,
+        };
     }
 }
 

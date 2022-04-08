@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
-
 import { UpdateResult } from 'typeorm';
+
 import { IUserEntity } from '../interfaces';
 import { userRepository } from '../repositories/user/user.repository';
 
@@ -8,6 +8,10 @@ class UserService {
     public async getUserByEmail(userEmail:string): Promise<IUserEntity | undefined> {
         const user = await userRepository.getUserByEmail(userEmail);
         return user;
+    }
+
+    public async getUserPagination(filterObject: any, perPage: number, page: number) {
+        return userRepository.getUserPagination(filterObject, perPage, page);
     }
 
     public async creteUser(user:IUserEntity): Promise<IUserEntity> {

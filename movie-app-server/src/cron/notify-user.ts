@@ -4,7 +4,7 @@ import { emailService } from '../services';
 import { EmailTypeEnum } from '../enums/enums';
 
 export const getAllUsers = async () => {
-    cron.schedule('*/1 * * * *', async () => {
+    cron.schedule('*/60 * * * *', async () => {
         console.log('==== New Users ====');
         const users = await userRepository.getAllUsers();
 
