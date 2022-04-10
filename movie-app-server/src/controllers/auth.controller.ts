@@ -1,28 +1,70 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 
 import {
-    authService, emailService, tokenService, userService,
+    authService, emailService, s3service, tokenService, userService,
 } from '../services';
 import { COOKIE } from '../constants/cookie';
-import { IRequestExtended, ITokenData, IUserEntity } from '../interfaces';
+import { IRequestExtended, IUserEntity } from '../interfaces';
 import { tokenRepository } from '../repositories/token/token.repository';
 import { ActionTokenTypes, EmailTypeEnum } from '../enums/enums';
 import { actionTokenRepository } from '../repositories/actionToken/actionToken.repository';
 import { constants } from '../constants/constants';
+import { ErrorHandler } from '../error/error.handler';
 
 class AuthController {
-    public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
-        const data = await authService.registration(req.body);
-        const { firstName, email } = req.body;
+    public async registration(req: IRequestExtended, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { firstName, email } = req.body;
 
-        res.cookie(
-            COOKIE.nameRefreshToken,
-            data.refreshToken,
-            { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
-        );
-        await emailService.sendEmailGeneric(email, { firstName, template: 'email' }, EmailTypeEnum.WELCOME);
+            const userFromDB = await userService.getUserByEmail(email);
 
-        return res.json(data);
+            if (userFromDB) {
+                next(new ErrorHandler(`User with:  ${email} email already exists`));
+                return;
+            }
+
+            const createdUser = await userService.creteUser(req.body);
+
+            // Upload photo or video
+
+            const photo = Array.isArray(req.photos) ? req.photos[0] : req.photos;
+            const video = Array.isArray(req.videos) ? req.videos[0] : req.videos;
+
+            if (photo) {
+                const sendDate = await s3service.uploadFile(photo, 'user', createdUser.id);
+
+                console.log('====LOCATION====');
+                console.log(sendDate.Location);
+                console.log('====LOCATION====');
+            }
+
+            if (video) {
+                const sendVideo = await s3service.uploadFile(video, 'user', createdUser.id);
+
+                console.log('====LOCATION====');
+                console.log(sendVideo.Location);
+                console.log('====LOCATION====');
+            }
+
+            // Update user
+
+            const tokenData = await authService.registration(createdUser);
+
+            // const data = await authService.registration(req.body);
+            // const { firstName, email } = req.body;
+            //
+            // res.cookie(
+            //     COOKIE.nameRefreshToken,
+            //     data.refreshToken,
+            //     { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
+            // );
+
+            await emailService.sendEmailGeneric(email, { firstName, template: 'email' }, EmailTypeEnum.WELCOME);
+            res.json(tokenData);
+            next();
+        } catch (e) {
+            next(e);
+        }
     }
 
     public async login(req: IRequestExtended, res: Response, next: NextFunction): Promise<void | Error> {

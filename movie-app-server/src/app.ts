@@ -1,13 +1,16 @@
 import 'reflect-metadata';
 import express from 'express';
+import fileUpload from 'express-fileupload';
 import { createConnection } from 'typeorm';
 import cors from 'cors';
 
 import { config } from './config/config';
 import { apiRouter } from './routers/apiRouter';
-import { cronRun } from './cron/index';
+import { cronRun } from './cron';
 
 const app = express();
+
+app.use(fileUpload());
 
 app.use(cors({
     origin: 'http://localhost:3000',
