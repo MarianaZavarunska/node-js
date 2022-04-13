@@ -17,12 +17,10 @@ class S3Service {
     }
 
     uploadFile(file: UploadedFile, itemType: string, itemId:number): Promise<ManagedUpload.SendData> {
-
         const uploadFilePath = this.fileNameBilder(file.name, itemType, itemId);
 
         console.log('====uploadFilePath====');
         console.log(uploadFilePath);
-
 
         return this.Bucket.upload({
             Bucket: config.S3_NAME as string,

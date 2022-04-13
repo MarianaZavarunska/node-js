@@ -52,5 +52,5 @@ export class User extends CommonFields implements IUserEntity {
         type: 'varchar',
         width: 250,
     })
-    avatar: string;
+        avatar: string;
 }

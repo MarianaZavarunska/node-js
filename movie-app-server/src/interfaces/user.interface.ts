@@ -1,4 +1,4 @@
-import { ICommonEntity } from "./commonFields.interface";
+import { ICommonEntity } from './commonFields.interface';
 
 export interface IUserEntity extends ICommonEntity {
   firstName: string;
