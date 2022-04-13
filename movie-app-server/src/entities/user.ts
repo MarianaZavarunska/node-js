@@ -47,4 +47,10 @@ export class User extends CommonFields implements IUserEntity {
         nullable: false,
     })
         password: string;
+
+    @Column({
+        type: 'varchar',
+        width: 250,
+    })
+    avatar: string;
 }

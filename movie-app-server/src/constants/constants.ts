@@ -3,6 +3,7 @@ export const constants = {
     PHOTO_MAX_SIZE: 2 * 1024 * 1024,
     VIDEO_MAX_SIZE: 20 * 1024 * 1024,
 
+
     PHOTOS_MIMETYPES: [
         'image/gif', // .gif
         'image/jpeg', // .jpg, .jpeg

@@ -13,22 +13,17 @@ class FileMiddleware {
                 return;
             }
 
-            // console.log('====req.files===');
-            // console.log(req.files);
-
             if (!req.photos) req.photos = [];
             if (!req.videos) req.videos = [];
 
             Object.entries(req.files).forEach(([_, file]) => {
                 const { name, size, mimetype } = Array.isArray(file) ? file[0] : file as UploadedFile;
 
-                // console.log('===========video=============');
-                //  console.log(file)
-
                 if (constants.PHOTOS_MIMETYPES.includes(mimetype)) {
                     if (size <= constants.PHOTO_MAX_SIZE) {
                         req.photos?.push(file);
                     } else {
+                        console.log('upload video', req.photos);
                         next(new ErrorHandler(`File ${name} is too big`));
                     }
                 } else if (constants.VIDEO_MIMETYPES.includes(mimetype)) {

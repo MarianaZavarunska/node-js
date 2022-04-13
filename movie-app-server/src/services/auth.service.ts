@@ -26,8 +26,7 @@ class AuthService {
 
         return {
             ...tokenPair,
-            userId: id,
-            userEmail: email,
+            user: data,
         };
     }
 }
