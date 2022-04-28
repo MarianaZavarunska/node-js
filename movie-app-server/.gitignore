@@ -1,8 +1,0 @@
-/dist
-/node_modules
-.idea
-ormconfig.json
-package-lock.json
-.env
-
-.DS_Store
